@@ -81,6 +81,12 @@ html {
     }
 }
 
+@layer utilities {
+    .mix-blend-plus-darker {
+        mix-blend-mode: plus-darker;
+    }
+}
+
 @layer base {
     * {
         @apply border-border;

@@ -2,9 +2,14 @@
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 
+interface Quote {
+    message: string;
+    author: string;
+}
+
 const page = usePage();
 const name = page.props.name;
-const quote = page.props.quote;
+const quote = page.props.quote as Quote;
 
 defineProps<{
     title?: string;
