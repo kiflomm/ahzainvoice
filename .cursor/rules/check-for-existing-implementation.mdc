@@ -1,0 +1,10 @@
+---
+description: 
+globs: 
+---
+
+# When i request an edit or new feature, Always check for existing implementation.
+Examples: 
+- instead of initializing something twice, check if we already have existing implementation first
+- instead of installing a new tool, check if we have implemented it in another way already
+
