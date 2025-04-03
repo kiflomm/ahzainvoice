@@ -30,6 +30,10 @@ class Invoice extends Model
         'category_id',
         'user_id',
         'file_path',
+        'calendar_type',
+        'ethiopian_invoice_date',
+        'ethiopian_due_date',
+        'ethiopian_payment_date',
     ];
 
     protected $casts = [

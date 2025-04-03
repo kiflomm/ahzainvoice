@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -154,9 +154,12 @@ const recentInvoices = [
                     </table>
                 </div>
                 <div class="flex justify-center px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-                    <a href="#" class="text-sm font-medium text-[#19647E] hover:text-[#28536B] dark:text-[#A9D8B8] dark:hover:text-[#BFDBF7]">
+                    <Link
+                        :href="route('invoices.index')"
+                        class="text-sm font-medium text-[#19647E] hover:text-[#28536B] dark:text-[#A9D8B8] dark:hover:text-[#BFDBF7]"
+                    >
                         View all invoices
-                    </a>
+                    </Link>
                 </div>
             </div>
 
@@ -165,24 +168,33 @@ const recentInvoices = [
                 <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-[#1a202c]">
                     <h3 class="text-lg font-medium text-[#28536B] dark:text-white">Quick Actions</h3>
                     <div class="mt-4 flex flex-wrap gap-3">
-                        <a href="#" class="inline-flex items-center rounded-md bg-[#19647E] px-4 py-2 text-sm font-medium text-white hover:bg-[#28536B]">
+                        <Link
+                            :href="route('invoices.create')"
+                            class="inline-flex items-center rounded-md bg-[#19647E] px-4 py-2 text-sm font-medium text-white hover:bg-[#28536B]"
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
                             New Invoice
-                        </a>
-                        <a href="#" class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-[#28536B] border border-gray-300 hover:bg-[#EDF2F4] dark:bg-[#1a202c] dark:text-gray-200 dark:border-gray-600 dark:hover:bg-[#28536B]/20">
+                        </Link>
+                        <Link
+                            :href="route('vendors.index')"
+                            class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-[#28536B] border border-gray-300 hover:bg-[#EDF2F4] dark:bg-[#1a202c] dark:text-gray-200 dark:border-gray-600 dark:hover:bg-[#28536B]/20"
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                             </svg>
                             Manage Vendors
-                        </a>
-                        <a href="#" class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-[#28536B] border border-gray-300 hover:bg-[#EDF2F4] dark:bg-[#1a202c] dark:text-gray-200 dark:border-gray-600 dark:hover:bg-[#28536B]/20">
+                        </Link>
+                        <Link
+                            :href="route('invoices.export.csv')"
+                            class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-[#28536B] border border-gray-300 hover:bg-[#EDF2F4] dark:bg-[#1a202c] dark:text-gray-200 dark:border-gray-600 dark:hover:bg-[#28536B]/20"
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                             </svg>
                             Export Data
-                        </a>
+                        </Link>
                     </div>
                 </div>
 

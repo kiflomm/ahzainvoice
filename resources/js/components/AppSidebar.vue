@@ -5,13 +5,13 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { Folder, LayoutGrid, Tag, Users } from 'lucide-vue-next';
+import { Folder, LayoutGrid, Users } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: 'dashboard',
         icon: LayoutGrid,
     },
 ];
@@ -19,18 +19,13 @@ const mainNavItems: NavItem[] = [
 const footerNavItems: NavItem[] = [
     {
         title: 'Invoices',
-        href: '/invoices',
+        href: 'invoices.index',
         icon: Folder,
     },
     {
         title: 'Vendors',
-        href: '/vendors',
+        href: 'vendors.index',
         icon: Users,
-    },
-    {
-        title: 'Categories',
-        href: '/categories',
-        icon: Tag,
     },
 ];
 </script>
