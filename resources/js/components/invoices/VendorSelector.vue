@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -40,6 +40,19 @@ const emit = defineEmits<{
 }>();
 
 const showNewVendorDialog = ref(false);
+const selectedValue = ref(props.modelValue);
+
+// Watch for external changes
+watch(() => props.modelValue, (newValue) => {
+    selectedValue.value = newValue;
+    console.log('Vendor value changed:', newValue);
+});
+
+const handleSelect = (value: number) => {
+    console.log('Selected vendor:', value);
+    selectedValue.value = value;
+    emit('update:modelValue', value);
+};
 
 const form = useForm({
     name: '',
@@ -68,11 +81,11 @@ const createVendor = () => {
                 <Select 
                     id="vendor_id"
                     name="vendor_id"
-                    :value="modelValue"
+                    :value="selectedValue"
                     :required="required"
-                    @update:value="emit('update:modelValue', $event)"
+                    @update:value="handleSelect"
                 >
-                    <SelectTrigger>
+                    <SelectTrigger class="w-full">
                         <SelectValue placeholder="Select a vendor" />
                     </SelectTrigger>
                     <SelectContent>
@@ -127,5 +140,6 @@ const createVendor = () => {
                 </DialogContent>
             </Dialog>
         </div>
+        <input type="hidden" name="vendor_id" :value="selectedValue" required />
     </div>
 </template> 

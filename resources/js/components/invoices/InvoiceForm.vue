@@ -15,7 +15,7 @@ interface Vendor {
 
 interface Invoice {
     id?: number;
-    vendor_id: number;
+    vendor_id: number | null;
     invoice_number: string;
     invoice_date: string;
     ethiopian_invoice_date: string | null;
@@ -25,9 +25,11 @@ interface Invoice {
     payment_date: string | null;
     ethiopian_payment_date: string | null;
     total_amount: number;
+    subtotal_amount: number;
     tax_amount: number;
     notes: string;
     status: 'draft' | 'pending' | 'paid' | 'overdue' | 'cancelled';
+    items: any[];
 }
 
 const props = defineProps<{
@@ -46,21 +48,39 @@ const form = useForm<Invoice>({
     payment_date: props.invoice?.payment_date ?? null,
     ethiopian_payment_date: props.invoice?.ethiopian_payment_date ?? null,
     total_amount: props.invoice?.total_amount ?? 0,
+    subtotal_amount: props.invoice?.subtotal_amount ?? 0,
     tax_amount: props.invoice?.tax_amount ?? 0,
     notes: props.invoice?.notes ?? '',
     status: props.invoice?.status ?? 'draft',
+    items: props.invoice?.items ?? [],
 });
 
 const isEditing = computed(() => !!props.invoice);
 
+const handleVendorSelect = (value: number) => {
+    console.log('Vendor selected:', value);
+    form.vendor_id = value;
+};
+
 const submit = () => {
+    // Calculate subtotal_amount based on total_amount and tax_amount
+    form.subtotal_amount = Number(form.total_amount) - Number(form.tax_amount);
+    
+    console.log('Submitting form with vendor_id:', form.vendor_id);
+    
     if (isEditing.value) {
         form.put(route('invoices.update', props.invoice?.id), {
             preserveScroll: true,
+            onError: (errors) => {
+                console.log('Form errors:', errors);
+            }
         });
     } else {
         form.post(route('invoices.store'), {
             preserveScroll: true,
+            onError: (errors) => {
+                console.log('Form errors:', errors);
+            }
         });
     }
 };
@@ -82,8 +102,9 @@ const submit = () => {
                             <div class="space-y-2">
                                 <VendorSelector
                                     :vendors="vendors"
-                                    v-model="form.vendor_id"
+                                    :model-value="form.vendor_id"
                                     :required="true"
+                                    @update:model-value="handleVendorSelect"
                                 />
                                 <div v-if="form.errors.vendor_id" class="text-sm text-red-500">
                                     {{ form.errors.vendor_id }}
