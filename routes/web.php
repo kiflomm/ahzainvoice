@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\VendorController;
+use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -21,6 +22,14 @@ Route::middleware('auth')->group(function () {
 
     // Vendors
     Route::resource('vendors', VendorController::class);
+});
+
+// Super Admin Routes
+Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super-admin.')->group(function () {
+    Route::get('/dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
+    Route::post('/verify-admin/{user}', [SuperAdminController::class, 'verifyAdmin'])->name('verify');
+    Route::post('/reject-admin/{user}', [SuperAdminController::class, 'rejectAdmin'])->name('reject');
+    Route::delete('/remove-admin/{user}', [SuperAdminController::class, 'removeAdmin'])->name('remove');
 });
 
 require __DIR__.'/settings.php';
