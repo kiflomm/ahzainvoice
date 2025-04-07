@@ -40,6 +40,8 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'employee', // Default role for normal users (employees)
+            'is_verified' => false, // Employees need verification by a super admin
         ]);
 
         event(new Registered($user));
