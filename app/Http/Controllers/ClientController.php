@@ -14,18 +14,19 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::withCount('invoices')
+        $clients = Client::withCount('records')
             ->orderBy('name')
             ->get()
             ->map(function ($client) {
                 return [
                     'id' => $client->id,
                     'name' => $client->name,
-                    'contact_person' => $client->contact_person,
-                    'email' => $client->email,
+                    'address' => $client->address,
                     'phone' => $client->phone,
-                    'invoices_count' => $client->invoices_count,
-                    'is_active' => $client->is_active,
+                    'tin_number' => $client->tin_number,
+                    'vat_registration' => $client->vat_registration,
+                    'registration_date' => $client->registration_date?->format('Y-m-d'),
+                    'records_count' => $client->records_count,
                 ];
             });
 
@@ -49,12 +50,11 @@ class ClientController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'contact_person' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
-            'notes' => 'nullable|string',
-            'is_active' => 'boolean',
+            'phone' => 'nullable|string|max:20',
+            'tin_number' => 'nullable|string|max:255',
+            'vat_registration' => 'nullable|string|max:255',
+            'registration_date' => 'nullable|date',
         ]);
 
         Client::create($validated);
@@ -68,29 +68,30 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        $client->load(['invoices' => function ($query) {
-            $query->orderBy('invoice_date', 'desc')->limit(5);
+        $client->load(['records' => function ($query) {
+            $query->orderBy('created_at', 'desc')->limit(5);
         }]);
 
         return Inertia::render('Clients/Show', [
             'client' => [
                 'id' => $client->id,
                 'name' => $client->name,
-                'contact_person' => $client->contact_person,
-                'email' => $client->email,
-                'phone' => $client->phone,
                 'address' => $client->address,
-                'notes' => $client->notes,
-                'is_active' => $client->is_active,
+                'phone' => $client->phone,
+                'tin_number' => $client->tin_number,
+                'vat_registration' => $client->vat_registration,
+                'registration_date' => $client->registration_date?->format('Y-m-d'),
                 'created_at' => $client->created_at->format('Y-m-d H:i:s'),
                 'updated_at' => $client->updated_at->format('Y-m-d H:i:s'),
-                'recent_invoices' => $client->invoices->map(function ($invoice) {
+                'recent_records' => $client->records->map(function ($record) {
                     return [
-                        'id' => $invoice->id,
-                        'invoice_number' => $invoice->invoice_number,
-                        'invoice_date' => $invoice->invoice_date->format('Y-m-d'),
-                        'total_amount' => number_format($invoice->total_amount, 2),
-                        'status' => $invoice->status,
+                        'id' => $record->id,
+                        'record_number' => $record->record_number,
+                        'record_type' => $record->record_type,
+                        'start_date' => $record->start_date->format('Y-m-d'),
+                        'end_date' => $record->end_date->format('Y-m-d'),
+                        'value_after_vat' => number_format($record->value_after_vat, 2),
+                        'status' => $record->status,
                     ];
                 }),
             ],
@@ -106,12 +107,11 @@ class ClientController extends Controller
             'client' => [
                 'id' => $client->id,
                 'name' => $client->name,
-                'contact_person' => $client->contact_person,
-                'email' => $client->email,
-                'phone' => $client->phone,
                 'address' => $client->address,
-                'notes' => $client->notes,
-                'is_active' => $client->is_active,
+                'phone' => $client->phone,
+                'tin_number' => $client->tin_number,
+                'vat_registration' => $client->vat_registration,
+                'registration_date' => $client->registration_date?->format('Y-m-d'),
             ],
         ]);
     }
@@ -123,12 +123,11 @@ class ClientController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'contact_person' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
             'address' => 'nullable|string|max:255',
-            'notes' => 'nullable|string',
-            'is_active' => 'boolean',
+            'phone' => 'nullable|string|max:20',
+            'tin_number' => 'nullable|string|max:255',
+            'vat_registration' => 'nullable|string|max:255',
+            'registration_date' => 'nullable|date',
         ]);
 
         $client->update($validated);
@@ -142,10 +141,10 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        // Check if client has invoices
-        if ($client->invoices()->count() > 0) {
+        // Check if client has records
+        if ($client->records()->count() > 0) {
             return Redirect::route('clients.index')
-                ->with('error', 'Cannot delete client with existing invoices.');
+                ->with('error', 'Cannot delete client with existing records.');
         }
 
         $client->delete();

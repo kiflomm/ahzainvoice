@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\RecordController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
@@ -14,11 +14,10 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Invoice Management Routes
+// Record Management Routes
 Route::middleware(['auth', 'verified.employee'])->group(function () {
-    // Invoices
-    Route::resource('invoices', InvoiceController::class);
-    Route::get('invoices/export/csv', [InvoiceController::class, 'exportCsv'])->name('invoices.export.csv');
+    // Records
+    Route::resource('records', RecordController::class);
 
     // Clients
     Route::resource('clients', ClientController::class);
