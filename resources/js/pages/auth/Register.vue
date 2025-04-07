@@ -63,8 +63,8 @@ const submit = () => {
                             <h2 class="text-3xl lg:text-4xl font-bold text-white mt-12 mb-4">
                                 Start managing your invoices today
                             </h2>
-                            <p class="text-white/80 text-lg max-w-md">
-                                Join our platform and streamline your vendor invoice management process with our powerful tools.
+                            <p class="mb-6 text-lg text-white/80">
+                                Join our platform and streamline your client invoice management process with our powerful tools.
                             </p>
                         </div>
 
@@ -81,7 +81,7 @@ const submit = () => {
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
                                     </div>
-                                    <span class="text-white/90">Organize vendor details and invoices</span>
+                                    <span class="text-white/90">Organize client details and invoices</span>
                                 </div>
                                 <div class="flex items-center space-x-3">
                                     <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">

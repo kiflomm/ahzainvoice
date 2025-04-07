@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Vendor extends Model
+class Client extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -28,7 +28,7 @@ class Vendor extends Model
     ];
 
     /**
-     * Get all invoices for this vendor
+     * Get all invoices for this client
      */
     public function invoices()
     {

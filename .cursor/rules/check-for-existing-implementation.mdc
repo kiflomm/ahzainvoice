@@ -1,6 +1,7 @@
 ---
 description: 
 globs: 
+alwaysApply: true
 ---
 
 # When i request an edit or new feature, Always check for existing implementation.

@@ -76,7 +76,7 @@ const page = usePage<PageProps>();
               <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#19647E] to-[#28536B] dark:from-[#BFDBF7] dark:to-[#A9D8B8]">Invoice Management System</span>
             </h2>
             <p class="mx-auto mt-6 max-w-2xl text-xl text-[#28536B]/80 dark:text-gray-300 leading-relaxed">
-              A streamlined system to record, track, and analyze invoices from our vendors.
+              A streamlined system to record, track, and analyze invoices for our clients.
             </p>
 
             <div class="mt-12">
@@ -103,9 +103,9 @@ const page = usePage<PageProps>();
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold text-[#28536B] dark:text-white mb-3">Vendor Management</h3>
+            <h3 class="text-xl font-semibold text-[#28536B] dark:text-white mb-3">Client Management</h3>
             <p class="text-[#28536B]/80 dark:text-gray-300 leading-relaxed">
-              Organize vendor details and track their invoice history in one centralized system.
+              Organize client details and track their invoice history in one centralized system.
             </p>
           </div>
 
@@ -195,7 +195,7 @@ const page = usePage<PageProps>();
               <h3 class="text-2xl font-bold text-[#19647E] dark:text-[#A9D8B8]">Ahaz Platforms</h3>
             </div>
             <p class="text-[#28536B]/80 dark:text-gray-400 max-w-md leading-relaxed">
-              Streamlining vendor invoice management for modern businesses.
+              Streamlining client invoice management for modern businesses.
             </p>
             <div class="flex space-x-6">
               <a href="#" class="text-[#28536B]/60 hover:text-[#19647E] dark:text-gray-400 dark:hover:text-[#A9D8B8] transition-all duration-200 transform hover:scale-110">
@@ -237,9 +237,9 @@ const page = usePage<PageProps>();
                   </Link>
                 </li>
                 <li>
-                  <Link :href="route('vendors.index')" class="text-[#28536B]/80 hover:text-[#19647E] dark:text-gray-400 dark:hover:text-[#A9D8B8] transition-colors duration-200 flex items-center group">
+                  <Link :href="route('clients.index')" class="text-[#28536B]/80 hover:text-[#19647E] dark:text-gray-400 dark:hover:text-[#A9D8B8] transition-colors duration-200 flex items-center group">
                     <span class="w-0 h-0.5 bg-[#19647E] dark:bg-[#A9D8B8] transition-all duration-300 mr-0 group-hover:w-3 group-hover:mr-2"></span>
-                    Vendors
+                    Clients
                   </Link>
                         </li>
                 <li>

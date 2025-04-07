@@ -18,6 +18,8 @@ class SuperAdminSeeder extends Seeder
             'email' => 'admin@ahazinvoice.com',
             'email_verified_at' => now(),
             'password' => Hash::make('admin123'), // You should change this password in production
+            'role' => 'super_admin',
+            'is_verified' => true,
         ]);
     }
 }

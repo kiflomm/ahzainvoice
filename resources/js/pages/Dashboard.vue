@@ -21,11 +21,11 @@ const stats = {
 };
 
 const recentInvoices = [
-    { id: 1, number: 'INV-001', vendor: 'TechSupplies Inc.', date: '2025-04-01', amount: '$540.25', status: 'paid' },
-    { id: 2, number: 'INV-002', vendor: 'Office Solutions', date: '2025-04-02', amount: '$890.00', status: 'pending' },
-    { id: 3, number: 'INV-003', vendor: 'Hardware Depot', date: '2025-03-28', amount: '$1,250.75', status: 'overdue' },
-    { id: 4, number: 'INV-004', vendor: 'Paper Plus', date: '2025-04-03', amount: '$320.50', status: 'pending' },
-    { id: 5, number: 'INV-005', vendor: 'Tech Services Inc.', date: '2025-04-01', amount: '$750.00', status: 'paid' },
+    { id: 1, number: 'INV-001', client: 'TechSupplies Inc.', date: '2025-04-01', amount: '$540.25', status: 'paid' },
+    { id: 2, number: 'INV-002', client: 'Office Solutions', date: '2025-04-02', amount: '$890.00', status: 'pending' },
+    { id: 3, number: 'INV-003', client: 'Hardware Depot', date: '2025-03-28', amount: '$1,250.75', status: 'overdue' },
+    { id: 4, number: 'INV-004', client: 'Paper Plus', date: '2025-04-03', amount: '$320.50', status: 'pending' },
+    { id: 5, number: 'INV-005', client: 'Tech Services Inc.', date: '2025-04-01', amount: '$750.00', status: 'paid' },
 ];
 </script>
 
@@ -108,7 +108,7 @@ const recentInvoices = [
                                     Invoice
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#28536B]/70 dark:text-gray-400">
-                                    Vendor
+                                    Client
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#28536B]/70 dark:text-gray-400">
                                     Date
@@ -127,7 +127,7 @@ const recentInvoices = [
                                     <div class="text-sm font-medium text-[#28536B] dark:text-white">{{ invoice.number }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ invoice.vendor }}</div>
+                                    <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ invoice.client }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ invoice.date }}</div>
@@ -175,7 +175,7 @@ const recentInvoices = [
                             <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                             </svg>
-                            Manage Vendors
+                            Manage Clients
                         </a>
                         <a href="#" class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-[#28536B] border border-gray-300 hover:bg-[#EDF2F4] dark:bg-[#1a202c] dark:text-gray-200 dark:border-gray-600 dark:hover:bg-[#28536B]/20">
                             <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

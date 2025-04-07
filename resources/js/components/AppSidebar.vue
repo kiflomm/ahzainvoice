@@ -23,8 +23,8 @@ const footerNavItems: NavItem[] = [
         icon: Folder,
     },
     {
-        title: 'Vendors',
-        href: '/vendors',
+        title: 'Clients',
+        href: '/clients',
         icon: Users,
     },
     {

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('vendor_id')->constrained();
+            $table->foreignId('client_id')->constrained();
             $table->string('invoice_number');
             $table->date('invoice_date');
             $table->date('due_date')->nullable();
@@ -29,7 +29,6 @@ return new class extends Migration
             $table->string('approver_name')->nullable(); // Person who approved the payment
             $table->string('cashier_name')->nullable(); // Cashier who processed the payment
             $table->text('notes')->nullable();
-            $table->foreignId('category_id')->nullable()->constrained();
             $table->foreignId('user_id')->constrained(); // who created this record
             $table->string('file_path')->nullable(); // for pdf/image uploads
             $table->timestamps();
