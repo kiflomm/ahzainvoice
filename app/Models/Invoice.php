@@ -11,7 +11,7 @@ class Invoice extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'vendor_id',
+        'client_id',
         'invoice_number',
         'invoice_date',
         'due_date',
@@ -27,7 +27,6 @@ class Invoice extends Model
         'approver_name',
         'cashier_name',
         'notes',
-        'category_id',
         'user_id',
         'file_path',
     ];
@@ -43,19 +42,11 @@ class Invoice extends Model
     ];
 
     /**
-     * Get the vendor for this invoice
+     * Get the client for this invoice
      */
-    public function vendor()
+    public function client()
     {
-        return $this->belongsTo(Vendor::class);
-    }
-
-    /**
-     * Get the category for this invoice
-     */
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Client::class);
     }
 
     /**
@@ -64,13 +55,5 @@ class Invoice extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get all items for this invoice
-     */
-    public function items()
-    {
-        return $this->hasMany(InvoiceItem::class);
     }
 }

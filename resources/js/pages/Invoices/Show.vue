@@ -47,29 +47,29 @@ defineProps({
 
             <!-- Company and Customer Info -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6 mb-8">
-              <!-- Vendor Info (From) -->
+              <!-- Client Info (From) -->
               <div class="border rounded-lg p-4 bg-gray-50">
-                <h3 class="font-semibold text-[#28536B] mb-3">Vendor Information:</h3>
+                <h3 class="font-semibold text-[#28536B] mb-3">Client Information:</h3>
                 <table class="w-full text-sm">
                   <tr>
                     <td class="font-medium py-1 w-1/3">Name:</td>
-                    <td>{{ invoice.vendor.name }}</td>
+                    <td>{{ invoice.client.name }}</td>
                   </tr>
                   <tr>
                     <td class="font-medium py-1">Address:</td>
-                    <td>{{ invoice.vendor.address || 'N/A' }}</td>
+                    <td>{{ invoice.client.address || 'N/A' }}</td>
                   </tr>
                   <tr>
                     <td class="font-medium py-1">Phone:</td>
-                    <td>{{ invoice.vendor.phone || 'N/A' }}</td>
+                    <td>{{ invoice.client.phone || 'N/A' }}</td>
                   </tr>
                   <tr>
                     <td class="font-medium py-1">TIN No:</td>
-                    <td>{{ invoice.vendor.tin_number || 'N/A' }}</td>
+                    <td>{{ invoice.client.tin_number || 'N/A' }}</td>
                   </tr>
                   <tr>
                     <td class="font-medium py-1">VAT Reg. No:</td>
-                    <td>{{ invoice.vendor.vat_registration || 'N/A' }}</td>
+                    <td>{{ invoice.client.vat_registration || 'N/A' }}</td>
                   </tr>
                 </table>
               </div>

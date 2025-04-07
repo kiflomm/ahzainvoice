@@ -67,8 +67,8 @@ const submit = () => {
                             <h2 class="text-3xl lg:text-4xl font-bold text-white mt-12 mb-4">
                                 Welcome back!
                             </h2>
-                            <p class="text-white/80 text-lg max-w-md">
-                                Log in to access your dashboard and continue managing vendor invoices efficiently.
+                            <p class="mb-6 text-lg text-white/80">
+                                Log in to access your dashboard and continue managing client invoices efficiently.
                             </p>
                         </div>
 
@@ -85,7 +85,7 @@ const submit = () => {
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                         </svg>
                                     </div>
-                                    <span class="text-white/90">Access your vendor management dashboard</span>
+                                    <span class="text-white/90">Access your client management dashboard</span>
                                 </div>
                                 <div class="flex items-center space-x-3">
                                     <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">

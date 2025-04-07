@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\VendorController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,8 +20,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('invoices', InvoiceController::class);
     Route::get('invoices/export/csv', [InvoiceController::class, 'exportCsv'])->name('invoices.export.csv');
 
-    // Vendors
-    Route::resource('vendors', VendorController::class);
+    // Clients
+    Route::resource('clients', ClientController::class);
 });
 
 // Super Admin Routes

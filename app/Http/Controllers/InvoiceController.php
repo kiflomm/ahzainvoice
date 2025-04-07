@@ -1,14 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Category;
 use App\Models\Invoice;
-use App\Models\Vendor;
+use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {
@@ -17,16 +16,16 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::with('vendor')
+        $invoices = Invoice::with('client')
             ->orderBy('invoice_date', 'desc')
             ->get()
             ->map(function ($invoice) {
                 return [
                     'id' => $invoice->id,
                     'invoice_number' => $invoice->invoice_number,
-                    'vendor' => [
-                        'id' => $invoice->vendor->id,
-                        'name' => $invoice->vendor->name,
+                    'client' => [
+                        'id' => $invoice->client->id,
+                        'name' => $invoice->client->name,
                     ],
                     'invoice_date' => $invoice->invoice_date->format('Y-m-d'),
                     'due_date' => $invoice->due_date ? $invoice->due_date->format('Y-m-d') : null,
@@ -45,16 +44,12 @@ class InvoiceController extends Controller
      */
     public function create()
     {
-        $vendors = Vendor::where('is_active', true)
+        $clients = Client::where('is_active', true)
             ->orderBy('name')
             ->get(['id', 'name']);
 
-        $categories = Category::orderBy('name')
-            ->get(['id', 'name']);
-
         return Inertia::render('Invoices/Create', [
-            'vendors' => $vendors,
-            'categories' => $categories,
+            'clients' => $clients,
         ]);
     }
 
@@ -64,7 +59,7 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'vendor_id' => 'required|exists:vendors,id',
+            'client_id' => 'required|exists:clients,id',
             'invoice_number' => 'required|string|max:255',
             'invoice_date' => 'required|date',
             'due_date' => 'nullable|date',
@@ -80,7 +75,6 @@ class InvoiceController extends Controller
             'approver_name' => 'nullable|string|max:255',
             'cashier_name' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
-            'category_id' => 'nullable|exists:categories,id',
             'items' => 'required|array|min:1',
             'items.*.item_number' => 'nullable|string',
             'items.*.description' => 'required|string',
@@ -113,7 +107,7 @@ class InvoiceController extends Controller
         }
 
         // Add authenticated user ID
-        $validated['user_id'] = auth()->id();
+        $validated['user_id'] = Auth::id();
 
         // Handle file upload if present
         if ($request->hasFile('invoice_file')) {
@@ -154,13 +148,13 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice)
     {
-        $invoice->load(['vendor', 'category', 'items', 'user']);
+        $invoice->load(['client',  'items', 'user']);
 
         return Inertia::render('Invoices/Show', [
             'invoice' => [
                 'id' => $invoice->id,
                 'invoice_number' => $invoice->invoice_number,
-                'vendor' => $invoice->vendor,
+                'client' => $invoice->client,
                 'invoice_date' => $invoice->invoice_date->format('Y-m-d'),
                 'due_date' => $invoice->due_date ? $invoice->due_date->format('Y-m-d') : null,
                 'total_amount' => $invoice->total_amount,
@@ -168,7 +162,6 @@ class InvoiceController extends Controller
                 'status' => $invoice->status,
                 'payment_date' => $invoice->payment_date ? $invoice->payment_date->format('Y-m-d') : null,
                 'notes' => $invoice->notes,
-                'category' => $invoice->category,
                 'items' => $invoice->items,
                 'file_path' => $invoice->file_path,
                 'created_at' => $invoice->created_at->format('Y-m-d H:i:s'),
@@ -185,20 +178,18 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
-        $invoice->load(['vendor', 'category', 'items']);
+        $invoice->load(['client',  'items']);
 
-        $vendors = Vendor::where('is_active', true)
+        $clients = Client::where('is_active', true)
             ->orderBy('name')
             ->get(['id', 'name']);
 
-        $categories = Category::orderBy('name')
-            ->get(['id', 'name']);
 
         return Inertia::render('Invoices/Edit', [
             'invoice' => [
                 'id' => $invoice->id,
                 'invoice_number' => $invoice->invoice_number,
-                'vendor_id' => $invoice->vendor_id,
+                'client_id' => $invoice->client_id,
                 'invoice_date' => $invoice->invoice_date->format('Y-m-d'),
                 'due_date' => $invoice->due_date ? $invoice->due_date->format('Y-m-d') : null,
                 'total_amount' => $invoice->total_amount,
@@ -206,12 +197,10 @@ class InvoiceController extends Controller
                 'status' => $invoice->status,
                 'payment_date' => $invoice->payment_date ? $invoice->payment_date->format('Y-m-d') : null,
                 'notes' => $invoice->notes,
-                'category_id' => $invoice->category_id,
                 'items' => $invoice->items,
                 'file_path' => $invoice->file_path,
             ],
-            'vendors' => $vendors,
-            'categories' => $categories,
+            'clients' => $clients,
         ]);
     }
 
@@ -221,7 +210,7 @@ class InvoiceController extends Controller
     public function update(Request $request, Invoice $invoice)
     {
         $validated = $request->validate([
-            'vendor_id' => 'required|exists:vendors,id',
+            'client_id' => 'required|exists:clients,id',
             'invoice_number' => 'required|string|max:255',
             'invoice_date' => 'required|date',
             'due_date' => 'nullable|date',
@@ -237,7 +226,6 @@ class InvoiceController extends Controller
             'approver_name' => 'nullable|string|max:255',
             'cashier_name' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
-            'category_id' => 'nullable|exists:categories,id',
             'items' => 'required|array|min:1',
             'items.*.id' => 'nullable|exists:invoice_items,id',
             'items.*.item_number' => 'nullable|string',
@@ -356,7 +344,7 @@ class InvoiceController extends Controller
      */
     public function exportCsv(Request $request)
     {
-        $invoices = Invoice::with(['vendor', 'category'])
+        $invoices = Invoice::with(['client'])
             ->orderBy('invoice_date', 'desc')
             ->get();
 
@@ -376,13 +364,12 @@ class InvoiceController extends Controller
             // Add CSV headers
             fputcsv($handle, [
                 'Invoice Number',
-                'Vendor',
+                'Client',
                 'Date',
                 'Due Date',
                 'Amount',
                 'Tax',
                 'Status',
-                'Category',
                 'Notes',
             ]);
 
@@ -390,13 +377,12 @@ class InvoiceController extends Controller
             foreach ($invoices as $invoice) {
                 fputcsv($handle, [
                     $invoice->invoice_number,
-                    $invoice->vendor->name,
+                    $invoice->client->name,
                     $invoice->invoice_date->format('Y-m-d'),
                     $invoice->due_date ? $invoice->due_date->format('Y-m-d') : 'N/A',
                     $invoice->total_amount,
                     $invoice->tax_amount,
                     $invoice->status,
-                    $invoice->category ? $invoice->category->name : 'N/A',
                     $invoice->notes,
                 ]);
             }

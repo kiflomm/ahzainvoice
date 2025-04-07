@@ -4,12 +4,12 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { ref, computed, onMounted } from 'vue';
 
 const props = defineProps({
-  vendors: Array,
+  clients: Array,
   categories: Array,
 });
 
 const form = useForm({
-  vendor_id: '',
+  client_id: '',
   invoice_number: '',
   invoice_date: new Date().toISOString().substr(0, 10),
   due_date: '',
@@ -25,7 +25,6 @@ const form = useForm({
   approver_name: '',
   cashier_name: '',
   notes: '',
-  category_id: '',
   items: [
     {
       item_number: '01',
@@ -125,22 +124,22 @@ const submit = () => {
 
           <form @submit.prevent="submit">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <!-- Left Column - Vendor and Invoice Details -->
+              <!-- Left Column - Client and Invoice Details -->
               <div class="space-y-4">
                 <div>
-                  <label for="vendor_id" class="block text-sm font-medium text-gray-700">Vendor</label>
+                  <label for="client_id" class="block text-sm font-medium text-gray-700">Client</label>
                   <select
-                    id="vendor_id"
-                    v-model="form.vendor_id"
+                    id="client_id"
+                    v-model="form.client_id"
                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-[#19647E] focus:ring focus:ring-[#19647E] focus:ring-opacity-50"
                     required
                   >
-                    <option value="">Select Vendor</option>
-                    <option v-for="vendor in vendors" :key="vendor.id" :value="vendor.id">
-                      {{ vendor.name }}
+                    <option value="">Select Client</option>
+                    <option v-for="client in clients" :key="client.id" :value="client.id">
+                      {{ client.name }}
                     </option>
                   </select>
-                  <div v-if="form.errors.vendor_id" class="text-red-500 text-sm mt-1">{{ form.errors.vendor_id }}</div>
+                  <div v-if="form.errors.client_id" class="text-red-500 text-sm mt-1">{{ form.errors.client_id }}</div>
                 </div>
 
                 <div>
@@ -168,22 +167,7 @@ const submit = () => {
                     required
                   />
                   <div v-if="form.errors.invoice_date" class="text-red-500 text-sm mt-1">{{ form.errors.invoice_date }}</div>
-                </div>
-
-                <div>
-                  <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
-                  <select
-                    id="category_id"
-                    v-model="form.category_id"
-                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-[#19647E] focus:ring focus:ring-[#19647E] focus:ring-opacity-50"
-                  >
-                    <option value="">Select Category (Optional)</option>
-                    <option v-for="category in categories" :key="category.id" :value="category.id">
-                      {{ category.name }}
-                    </option>
-                  </select>
-                  <div v-if="form.errors.category_id" class="text-red-500 text-sm mt-1">{{ form.errors.category_id }}</div>
-                </div>
+                </div> 
               </div>
             </div>
 
