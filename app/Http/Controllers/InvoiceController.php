@@ -17,7 +17,6 @@ class InvoiceController extends Controller
     public function index()
     {
         $invoices = Record::with('client')
-            ->where('user_id', Auth::id())
             ->where('record_type', 'invoice')
             ->orderBy('created_at', 'desc')
             ->get()
@@ -44,8 +43,7 @@ class InvoiceController extends Controller
      */
     public function create(Request $request)
     {
-        $clients = Client::where('user_id', Auth::id())
-            ->orderBy('name')
+        $clients = Client::orderBy('name')
             ->get(['id', 'name']);
 
         $defaultData = [
@@ -91,7 +89,6 @@ class InvoiceController extends Controller
         $invoice = Record::create([
             ...$validated,
             'record_type' => 'invoice',
-            'user_id' => Auth::id(),
             'value' => $value,
             'value_after_vat' => $value_after_vat,
         ]);
@@ -105,7 +102,7 @@ class InvoiceController extends Controller
      */
     public function show(Record $invoice)
     {
-        if ($invoice->user_id !== Auth::id() || $invoice->record_type !== 'invoice') {
+        if ($invoice->record_type !== 'invoice') {
             abort(403);
         }
 
@@ -121,12 +118,11 @@ class InvoiceController extends Controller
      */
     public function edit(Record $invoice)
     {
-        if ($invoice->user_id !== Auth::id() || $invoice->record_type !== 'invoice') {
+        if ($invoice->record_type !== 'invoice') {
             abort(403);
         }
 
-        $clients = Client::where('user_id', Auth::id())
-            ->orderBy('name')
+        $clients = Client::orderBy('name')
             ->get(['id', 'name']);
 
         return Inertia::render('Invoices/Edit', [
@@ -140,7 +136,7 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, Record $invoice)
     {
-        if ($invoice->user_id !== Auth::id() || $invoice->record_type !== 'invoice') {
+        if ($invoice->record_type !== 'invoice') {
             abort(403);
         }
 
@@ -167,7 +163,7 @@ class InvoiceController extends Controller
 
         $invoice->update([
             ...$validated,
-            'record_type' => 'invoice', // Ensure it stays as an invoice
+            'record_type' => 'invoice',
             'value' => $value,
             'value_after_vat' => $value_after_vat,
         ]);
@@ -181,7 +177,7 @@ class InvoiceController extends Controller
      */
     public function destroy(Record $invoice)
     {
-        if ($invoice->user_id !== Auth::id() || $invoice->record_type !== 'invoice') {
+        if ($invoice->record_type !== 'invoice') {
             abort(403);
         }
 

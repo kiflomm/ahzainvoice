@@ -57,7 +57,7 @@ class ClientController extends Controller
             'registration_date' => 'nullable|date',
         ]);
 
-        Client::create($validated);
+        $client = Client::create($validated);
 
         return Redirect::route('clients.index')
             ->with('success', 'Client created successfully.');

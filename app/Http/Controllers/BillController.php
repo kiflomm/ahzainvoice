@@ -17,7 +17,6 @@ class BillController extends Controller
     public function index()
     {
         $bills = Record::with('client')
-            ->where('user_id', Auth::id())
             ->where('record_type', 'bill')
             ->orderBy('created_at', 'desc')
             ->get()
@@ -44,17 +43,26 @@ class BillController extends Controller
      */
     public function create(Request $request)
     {
-        $clients = Client::where('user_id', Auth::id())
-            ->orderBy('name')
+        $clients = Client::orderBy('name')
             ->get(['id', 'name']);
 
         $defaultData = [
+            'id' => null,
+            'client_id' => $request->client_id ?? 0,
+            'record_number' => '',
+            'start_date' => '',
+            'end_date' => '',
+            'purchase_type' => '',
+            'status' => '',
+            'description' => '',
+            'unit' => '',
+            'quantity' => 1,
+            'unit_price' => 0,
+            'vat' => 0,
+            'mrc_number' => '',
+            'cdn_number' => '',
             'record_type' => 'bill'
         ];
-        
-        if ($request->has('client_id')) {
-            $defaultData['client_id'] = $request->client_id;
-        }
 
         return Inertia::render('Bills/Create', [
             'clients' => $clients,
@@ -76,9 +84,9 @@ class BillController extends Controller
             'status' => 'required|string|in:pending,paid,overdue',
             'description' => 'nullable|string',
             'unit' => 'required|string|max:50',
-            'quantity' => 'required|integer|min:1',
-            'unit_price' => 'required|numeric|min:0',
-            'vat' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1|max:9999',
+            'unit_price' => 'required|numeric|min:0|max:9999.99',
+            'vat' => 'required|numeric|min:0|max:100',
             'mrc_number' => 'nullable|string|max:255',
             'cdn_number' => 'nullable|string|max:255',
         ]);
@@ -88,12 +96,17 @@ class BillController extends Controller
         $vat_amount = $value * ($validated['vat'] / 100);
         $value_after_vat = $value + $vat_amount;
 
+        // Additional check for calculated values
+        if ($value > 99999999.99 || $value_after_vat > 99999999.99) {
+            return back()->withErrors(['error' => 'Total value exceeds maximum allowed amount'])->withInput();
+        }
+
         $bill = Record::create([
             ...$validated,
             'record_type' => 'bill',
-            'user_id' => Auth::id(),
             'value' => $value,
             'value_after_vat' => $value_after_vat,
+            'user_id' => Auth::id(),
         ]);
 
         return Redirect::route('bills.show', $bill)
@@ -105,7 +118,7 @@ class BillController extends Controller
      */
     public function show(Record $bill)
     {
-        if ($bill->user_id !== Auth::id() || $bill->record_type !== 'bill') {
+        if ($bill->record_type !== 'bill') {
             abort(403);
         }
 
@@ -121,12 +134,11 @@ class BillController extends Controller
      */
     public function edit(Record $bill)
     {
-        if ($bill->user_id !== Auth::id() || $bill->record_type !== 'bill') {
+        if ($bill->record_type !== 'bill') {
             abort(403);
         }
 
-        $clients = Client::where('user_id', Auth::id())
-            ->orderBy('name')
+        $clients = Client::orderBy('name')
             ->get(['id', 'name']);
 
         return Inertia::render('Bills/Edit', [
@@ -140,7 +152,7 @@ class BillController extends Controller
      */
     public function update(Request $request, Record $bill)
     {
-        if ($bill->user_id !== Auth::id() || $bill->record_type !== 'bill') {
+        if ($bill->record_type !== 'bill') {
             abort(403);
         }
 
@@ -153,9 +165,9 @@ class BillController extends Controller
             'status' => 'required|string|in:pending,paid,overdue',
             'description' => 'nullable|string',
             'unit' => 'required|string|max:50',
-            'quantity' => 'required|integer|min:1',
-            'unit_price' => 'required|numeric|min:0',
-            'vat' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1|max:9999',
+            'unit_price' => 'required|numeric|min:0|max:9999.99',
+            'vat' => 'required|numeric|min:0|max:100',
             'mrc_number' => 'nullable|string|max:255',
             'cdn_number' => 'nullable|string|max:255',
         ]);
@@ -165,11 +177,17 @@ class BillController extends Controller
         $vat_amount = $value * ($validated['vat'] / 100);
         $value_after_vat = $value + $vat_amount;
 
+        // Additional check for calculated values
+        if ($value > 99999999.99 || $value_after_vat > 99999999.99) {
+            return back()->withErrors(['error' => 'Total value exceeds maximum allowed amount'])->withInput();
+        }
+
         $bill->update([
             ...$validated,
-            'record_type' => 'bill', // Ensure it stays as a bill
+            'record_type' => 'bill',
             'value' => $value,
             'value_after_vat' => $value_after_vat,
+            'user_id' => Auth::id(),
         ]);
 
         return Redirect::route('bills.show', $bill)
@@ -181,7 +199,7 @@ class BillController extends Controller
      */
     public function destroy(Record $bill)
     {
-        if ($bill->user_id !== Auth::id() || $bill->record_type !== 'bill') {
+        if ($bill->record_type !== 'bill') {
             abort(403);
         }
 

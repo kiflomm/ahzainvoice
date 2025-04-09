@@ -5,7 +5,7 @@ import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { Folder, LayoutGrid, Tag, Users } from 'lucide-vue-next';
+import { Folder, LayoutGrid, Plus } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 
 const mainNavItems: NavItem[] = [
@@ -21,16 +21,21 @@ const footerNavItems: NavItem[] = [
         title: 'Invoices',
         href: '/invoices',
         icon: Folder,
+        action: {
+            title: 'New Invoice',
+            href: '/invoices/create',
+            icon: Plus,
+        },
     },
     {
-        title: 'Clients',
-        href: '/clients',
-        icon: Users,
-    },
-    {
-        title: 'Categories',
-        href: '/categories',
-        icon: Tag,
+        title: 'Bills',
+        href: '/bills',
+        icon: Folder,
+        action: {
+            title: 'New Bill',
+            href: '/bills/create',
+            icon: Plus,
+        },
     },
 ];
 </script>

@@ -15,12 +15,19 @@ defineProps<Props>();
         <SidebarGroupContent>
             <SidebarMenu>
                 <SidebarMenuItem v-for="item in items" :key="item.title">
-                    <SidebarMenuButton class="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100" as-child>
-                        <a :href="item.href" target="_blank" rel="noopener noreferrer">
-                            <component :is="item.icon" />
-                            <span>{{ item.title }}</span>
-                        </a>
-                    </SidebarMenuButton>
+                    <div class="flex items-center justify-between w-full">
+                        <SidebarMenuButton class="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100" as-child>
+                            <a :href="item.href" rel="noopener noreferrer">
+                                <component :is="item.icon" />
+                                <span>{{ item.title }}</span>
+                            </a>
+                        </SidebarMenuButton>
+                        <SidebarMenuButton v-if="item.action" class="text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100" as-child>
+                            <a :href="item.action.href" :title="item.action.title" rel="noopener noreferrer">
+                                <component :is="item.action.icon" class="w-4 h-4" />
+                            </a>
+                        </SidebarMenuButton>
+                    </div>
                 </SidebarMenuItem>
             </SidebarMenu>
         </SidebarGroupContent>

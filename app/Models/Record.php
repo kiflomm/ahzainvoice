@@ -27,6 +27,7 @@ class Record extends Model
         'value_after_vat',
         'mrc_number',
         'cdn_number',
+        'user_id',
     ];
 
     protected $casts = [
