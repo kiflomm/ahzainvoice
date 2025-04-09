@@ -1,48 +1,15 @@
-<script setup>
-import { ref, computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-
-const props = defineProps({
-  clients: {
-    type: Array,
-    required: true,
-  },
-});
-
-const search = ref('');
-
-const filteredClients = computed(() => {
-  if (!search.value) return props.clients;
-
-  const searchTerm = search.value.toLowerCase();
-  return props.clients.filter(client =>
-    client.name.toLowerCase().includes(searchTerm) ||
-    client.address.toLowerCase().includes(searchTerm) ||
-    client.phone.toLowerCase().includes(searchTerm) ||
-    client.tin_number.toLowerCase().includes(searchTerm)
-  );
-});
-
-const deleteClient = (id) => {
-  if (confirm('Are you sure you want to delete this client?')) {
-    router.delete(route('clients.destroy', id));
-  }
-};
-</script>
-
 <template>
   <AuthenticatedLayout>
     <template #header>
       <div class="flex justify-between items-center">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-          Clients
+          Records
         </h2>
         <Link
-          :href="route('clients.create')"
+          :href="route('records.create')"
           class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
-          Create Client
+          Create Record
         </Link>
       </div>
     </template>
@@ -55,7 +22,7 @@ const deleteClient = (id) => {
               <input
                 type="text"
                 v-model="search"
-                placeholder="Search clients..."
+                placeholder="Search..."
                 class="w-full px-3 py-2 border rounded-md"
               />
             </div>
@@ -64,19 +31,22 @@ const deleteClient = (id) => {
               <thead class="bg-gray-50">
                 <tr>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
+                    Record Number
                   </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Address
+                    Type
                   </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Phone
+                    Client
                   </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    TIN Number
+                    Date
                   </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Registration Date
+                    Amount
+                  </th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
                   </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
@@ -84,37 +54,49 @@ const deleteClient = (id) => {
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="client in filteredClients" :key="client.id">
+                <tr v-for="record in filteredRecords" :key="record.id">
                   <td class="px-6 py-4 whitespace-nowrap">
-                    {{ client.name }}
+                    {{ record.record_number }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap capitalize">
+                    {{ record.record_type }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    {{ client.address }}
+                    {{ record.client_name }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    {{ client.phone }}
+                    {{ record.start_date }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    {{ client.tin_number }}
+                    {{ record.value_after_vat }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    {{ client.registration_date }}
+                    <span
+                      :class="{
+                        'bg-green-100 text-green-800': record.status === 'paid',
+                        'bg-yellow-100 text-yellow-800': record.status === 'pending',
+                        'bg-red-100 text-red-800': record.status === 'overdue'
+                      }"
+                      class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                    >
+                      {{ record.status }}
+                    </span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <Link
-                      :href="route('clients.show', client.id)"
+                      :href="route('records.show', record.id)"
                       class="text-blue-600 hover:text-blue-900 mr-3"
                     >
                       View
                     </Link>
                     <Link
-                      :href="route('clients.edit', client.id)"
+                      :href="route('records.edit', record.id)"
                       class="text-indigo-600 hover:text-indigo-900 mr-3"
                     >
                       Edit
                     </Link>
                     <button
-                      @click="deleteClient(client.id)"
+                      @click="deleteRecord(record.id)"
                       class="text-red-600 hover:text-red-900"
                     >
                       Delete
@@ -129,3 +111,36 @@ const deleteClient = (id) => {
     </div>
   </AuthenticatedLayout>
 </template>
+
+<script setup>
+import { ref, computed } from 'vue';
+import { Link, router } from '@inertiajs/vue3';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+
+const props = defineProps({
+  records: {
+    type: Array,
+    required: true,
+  }
+});
+
+const search = ref('');
+
+const filteredRecords = computed(() => {
+  if (!search.value) return props.records;
+
+  const searchTerm = search.value.toLowerCase();
+  return props.records.filter(record =>
+    record.record_number.toLowerCase().includes(searchTerm) ||
+    record.client_name.toLowerCase().includes(searchTerm) ||
+    record.status.toLowerCase().includes(searchTerm) ||
+    record.record_type.toLowerCase().includes(searchTerm)
+  );
+});
+
+const deleteRecord = (id) => {
+  if (confirm('Are you sure you want to delete this record?')) {
+    router.delete(route('records.destroy', id));
+  }
+};
+</script>

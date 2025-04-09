@@ -44,6 +44,16 @@ const mainNavItems: NavItem[] = [
         href: '/dashboard',
         icon: LayoutGrid,
     },
+    {
+        title: 'Records',
+        href: '/records',
+        icon: BookOpen,
+    },
+    {
+        title: 'Clients',
+        href: '/clients',
+        icon: Folder,
+    },
 ];
 
 const rightNavItems: NavItem[] = [

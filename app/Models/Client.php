@@ -11,27 +11,22 @@ class Client extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'id',
         'name',
-        'contact_person',
-        'email',
-        'phone',
         'address',
+        'phone',
         'tin_number',
         'vat_registration',
         'registration_date',
-        'notes',
-        'is_active',
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
+        'registration_date' => 'date',
+
     ];
 
-    /**
-     * Get all invoices for this client
-     */
-    public function invoices()
+    public function records()
     {
-        return $this->hasMany(Invoice::class);
+        return $this->hasMany(Record::class);
     }
 }
