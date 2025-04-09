@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\RecordController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\BillController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
@@ -16,8 +18,14 @@ Route::get('dashboard', function () {
 
 // Record Management Routes
 Route::middleware(['auth', 'verified.employee'])->group(function () {
-    // Records
+    // Generic Records
     Route::resource('records', RecordController::class);
+    
+    // Invoices - Specific routes for invoice management
+    Route::resource('invoices', InvoiceController::class);
+    
+    // Bills - Specific routes for bill management
+    Route::resource('bills', BillController::class);
 
     // Clients
     Route::resource('clients', ClientController::class);
