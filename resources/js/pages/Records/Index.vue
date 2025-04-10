@@ -1,5 +1,5 @@
 <template>
-  <AuthenticatedLayout>
+  <AppLayout>
     <template #header>
       <div class="flex justify-between items-center">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -109,13 +109,13 @@
         </div>
       </div>
     </div>
-  </AuthenticatedLayout>
+  </AppLayout>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 
 const props = defineProps({
   records: {

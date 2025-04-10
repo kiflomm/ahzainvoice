@@ -16,23 +16,22 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Record Management Routes
-Route::middleware(['auth', 'verified.employee'])->group(function () {
-    // Generic Records
-    Route::resource('records', RecordController::class);
-    
-   
-});
- // Invoices - Specific routes for invoice management
- Route::resource('invoices', InvoiceController::class);
-    
+Route::resource('records', RecordController::class);
+// Invoices - Specific routes for invoice management
+Route::resource('invoices', InvoiceController::class);
+
  // Bills - Specific routes for bill management
  Route::resource('bills', BillController::class);
 
  // Clients
  Route::resource('clients', ClientController::class);
-// Super Admin Routes
-Route::middleware(['auth', 'super_admin'])->prefix('super-admin')->name('super-admin.')->group(function () {
+ // Super Admin Routes
+ // Record Management Routes
+ Route::middleware(['auth', 'verified.employee'])->group(function () {
+     // Generic Records
+
+ });
+Route::middleware(['auth'])->prefix('super-admin')->name('super-admin.')->group(function () {
     Route::get('/dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
     Route::post('/verify-employee/{user}', [SuperAdminController::class, 'verifyEmployee'])->name('verify');
     Route::post('/reject-employee/{user}', [SuperAdminController::class, 'rejectEmployee'])->name('reject');
