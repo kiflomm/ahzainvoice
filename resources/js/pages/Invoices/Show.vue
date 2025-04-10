@@ -2,9 +2,17 @@
   <AppLayout :title="`Invoice #${invoice.record_number}`">
     <template #header>
       <div class="flex justify-between items-center">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-          Invoice #{{ invoice.record_number }}
-        </h2>
+        <div class="flex items-center space-x-4">
+          <Button variant="outline" asChild>
+            <Link :href="route('invoices.index')" class="flex items-center">
+              <ArrowLeft class="h-4 w-4 mr-2" />
+              Back to Invoices
+            </Link>
+          </Button>
+          <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Invoice #{{ invoice.record_number }}
+          </h2>
+        </div>
         <div class="flex space-x-2">
           <Link
             :href="route('invoices.edit', invoice.id)"
@@ -136,6 +144,8 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
+import { ArrowLeft } from 'lucide-vue-next';
+import { Button } from '@/components/ui/button';
 
 interface Client {
   id: number;

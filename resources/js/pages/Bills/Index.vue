@@ -248,9 +248,9 @@ const filteredBills = computed(() => {
   result.sort((a, b) => {
     switch (sortBy.value) {
       case 'date_asc':
-        return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
+        return new Date(a.end_date).getTime() - new Date(b.end_date).getTime();
       case 'date_desc':
-        return new Date(b.start_date).getTime() - new Date(a.start_date).getTime();
+        return new Date(b.end_date).getTime() - new Date(a.end_date).getTime();
       case 'amount_asc':
         return parseFloat(a.value_after_vat) - parseFloat(b.value_after_vat);
       case 'amount_desc':
