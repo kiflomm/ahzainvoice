@@ -10,11 +10,7 @@
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
           <div class="p-6 bg-white border-b border-gray-200">
-            <InvoiceForm 
-              :clients="clients" 
-              :invoice="invoice"
-              :is-editing="true"
-            />
+            <Form :clients="clients" :record="invoice" />
           </div>
         </div>
       </div>
@@ -23,34 +19,31 @@
 </template>
 
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
-import InvoiceForm from './Form.vue';
+import AppLayout from '@/layouts/app/AppSidebarLayout.vue';
+import Form from './Form.vue';
 
 interface Client {
   id: number;
   name: string;
 }
 
-interface InvoiceItem {
-  id?: number;
-  description: string;
-  quantity: number;
-  rate: number;
-  amount: number;
-}
-
 interface Invoice {
   id: number;
   client_id: number;
-  invoice_number: string;
-  invoice_date: string;
-  due_date: string;
-  subtotal: number;
-  tax_rate: number;
-  tax_amount: number;
-  total: number;
-  notes?: string;
-  items: InvoiceItem[];
+  record_number: string;
+  start_date: string;
+  end_date: string;
+  purchase_type: string;
+  status: string;
+  description?: string;
+  unit: string;
+  quantity: number;
+  unit_price: number;
+  vat: number;
+  value: number;
+  value_after_vat: number;
+  mrc_number?: string;
+  cdn_number?: string;
 }
 
 interface Props {

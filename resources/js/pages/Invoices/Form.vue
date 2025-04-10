@@ -9,16 +9,10 @@
         <FormItem>
           <FormLabel>Client</FormLabel>
           <div class="flex items-center">
-            <Select 
-              :value="form.client_id"
-              @update:value="(value: number) => form.client_id = Number(value)"
-              class="flex-1"
-            >
+            <Select v-model="form.client_id" class="flex-1">
               <FormControl>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a client">
-                    {{ selectedClientName }}
-                  </SelectValue>
+                  <SelectValue placeholder="Select a client" />
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
@@ -67,7 +61,7 @@
         :value="form.end_date"
       >
         <FormItem>
-          <FormLabel>End Date</FormLabel>
+          <FormLabel>Invoice Date</FormLabel>
           <FormControl>
             <Input type="date" v-model="form.end_date" />
           </FormControl>
@@ -340,11 +334,6 @@ const form = useForm({
   vat: Number(props.record.vat) || 0,
   mrc_number: props.record.mrc_number || '',
   cdn_number: props.record.cdn_number || '',
-});
-
-const selectedClientName = computed(() => {
-  const client = localClients.value.find(c => c.id === form.client_id);
-  return client?.name || '';
 });
 
 // Convert string inputs to numbers for numeric fields

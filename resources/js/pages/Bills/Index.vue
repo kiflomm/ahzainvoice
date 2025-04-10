@@ -46,7 +46,7 @@
                     <SelectValue placeholder="Filter by status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Statuses</SelectItem>
+                    <SelectItem value="all">All Statuses</SelectItem>
                     <SelectItem value="pending">Pending</SelectItem>
                     <SelectItem value="paid">Paid</SelectItem>
                     <SelectItem value="overdue">Overdue</SelectItem>
@@ -77,7 +77,7 @@
                       Client
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date Range
+                      Due Date
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Amount
@@ -99,7 +99,7 @@
                       {{ bill.client_name }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      {{ formatDate(bill.start_date) }} - {{ formatDate(bill.end_date) }}
+                      {{ formatDate(bill.end_date) }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap font-medium">
                       {{ bill.value_after_vat }}
@@ -221,7 +221,7 @@ const props = defineProps<{
 }>();
 
 const search = ref('');
-const statusFilter = ref('');
+const statusFilter = ref('all');
 const sortBy = ref('date_desc');
 const billToDelete = ref<number | null>(null);
 const isDeleting = ref(false);
@@ -240,7 +240,7 @@ const filteredBills = computed(() => {
   }
 
   // Apply status filter
-  if (statusFilter.value) {
+  if (statusFilter.value && statusFilter.value !== 'all') {
     result = result.filter((bill) => bill.status === statusFilter.value);
   }
 
@@ -248,9 +248,9 @@ const filteredBills = computed(() => {
   result.sort((a, b) => {
     switch (sortBy.value) {
       case 'date_asc':
-        return new Date(a.start_date).getTime() - new Date(b.start_date).getTime();
+        return new Date(a.end_date).getTime() - new Date(b.end_date).getTime();
       case 'date_desc':
-        return new Date(b.start_date).getTime() - new Date(a.start_date).getTime();
+        return new Date(b.end_date).getTime() - new Date(a.end_date).getTime();
       case 'amount_asc':
         return parseFloat(a.value_after_vat) - parseFloat(b.value_after_vat);
       case 'amount_desc':

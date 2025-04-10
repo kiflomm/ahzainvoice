@@ -47,12 +47,22 @@ class InvoiceController extends Controller
             ->get(['id', 'name']);
 
         $defaultData = [
+            'id' => null,
+            'client_id' => $request->client_id ?? 0,
+            'record_number' => '',
+            'start_date' => '',
+            'end_date' => '',
+            'purchase_type' => '',
+            'status' => '',
+            'description' => '',
+            'unit' => '',
+            'quantity' => 1,
+            'unit_price' => 0,
+            'vat' => 0,
+            'mrc_number' => '',
+            'cdn_number' => '',
             'record_type' => 'invoice'
         ];
-        
-        if ($request->has('client_id')) {
-            $defaultData['client_id'] = $request->client_id;
-        }
 
         return Inertia::render('Invoices/Create', [
             'clients' => $clients,
@@ -74,9 +84,9 @@ class InvoiceController extends Controller
             'status' => 'required|string|in:pending,paid,overdue',
             'description' => 'nullable|string',
             'unit' => 'required|string|max:50',
-            'quantity' => 'required|integer|min:1',
-            'unit_price' => 'required|numeric|min:0',
-            'vat' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1|max:9999',
+            'unit_price' => 'required|numeric|min:0|max:9999.99',
+            'vat' => 'required|numeric|min:0|max:100',
             'mrc_number' => 'nullable|string|max:255',
             'cdn_number' => 'nullable|string|max:255',
         ]);
@@ -86,11 +96,17 @@ class InvoiceController extends Controller
         $vat_amount = $value * ($validated['vat'] / 100);
         $value_after_vat = $value + $vat_amount;
 
+        // Additional check for calculated values
+        if ($value > 99999999.99 || $value_after_vat > 99999999.99) {
+            return back()->withErrors(['error' => 'Total value exceeds maximum allowed amount'])->withInput();
+        }
+
         $invoice = Record::create([
             ...$validated,
             'record_type' => 'invoice',
             'value' => $value,
             'value_after_vat' => $value_after_vat,
+            'user_id' => Auth::id(),
         ]);
 
         return Redirect::route('invoices.show', $invoice)
@@ -149,9 +165,9 @@ class InvoiceController extends Controller
             'status' => 'required|string|in:pending,paid,overdue',
             'description' => 'nullable|string',
             'unit' => 'required|string|max:50',
-            'quantity' => 'required|integer|min:1',
-            'unit_price' => 'required|numeric|min:0',
-            'vat' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1|max:9999',
+            'unit_price' => 'required|numeric|min:0|max:9999.99',
+            'vat' => 'required|numeric|min:0|max:100',
             'mrc_number' => 'nullable|string|max:255',
             'cdn_number' => 'nullable|string|max:255',
         ]);
@@ -161,11 +177,17 @@ class InvoiceController extends Controller
         $vat_amount = $value * ($validated['vat'] / 100);
         $value_after_vat = $value + $vat_amount;
 
+        // Additional check for calculated values
+        if ($value > 99999999.99 || $value_after_vat > 99999999.99) {
+            return back()->withErrors(['error' => 'Total value exceeds maximum allowed amount'])->withInput();
+        }
+
         $invoice->update([
             ...$validated,
             'record_type' => 'invoice',
             'value' => $value,
             'value_after_vat' => $value_after_vat,
+            'user_id' => Auth::id(),
         ]);
 
         return Redirect::route('invoices.show', $invoice)
