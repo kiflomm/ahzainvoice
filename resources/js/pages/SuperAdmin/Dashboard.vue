@@ -18,8 +18,8 @@
                 </svg>
               </div>
               <div class="ml-4">
-                <h3 class="text-lg font-semibold text-gray-700">Total Admins</h3>
-                <p class="text-2xl font-bold text-gray-900">{{ pendingAdmins.length + verifiedAdmins.length }}</p>
+                <h3 class="text-lg font-semibold text-gray-700">Total Employees</h3>
+                <p class="text-2xl font-bold text-gray-900">{{ pendingEmployees.length + verifiedEmployees.length }}</p>
               </div>
             </div>
           </div>
@@ -33,7 +33,7 @@
               </div>
               <div class="ml-4">
                 <h3 class="text-lg font-semibold text-gray-700">Pending Approvals</h3>
-                <p class="text-2xl font-bold text-gray-900">{{ pendingAdmins.length }}</p>
+                <p class="text-2xl font-bold text-gray-900">{{ pendingEmployees.length }}</p>
               </div>
             </div>
           </div>
@@ -46,17 +46,17 @@
                 </svg>
               </div>
               <div class="ml-4">
-                <h3 class="text-lg font-semibold text-gray-700">Verified Admins</h3>
-                <p class="text-2xl font-bold text-gray-900">{{ verifiedAdmins.length }}</p>
+                <h3 class="text-lg font-semibold text-gray-700">Verified Employees</h3>
+                <p class="text-2xl font-bold text-gray-900">{{ verifiedEmployees.length }}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Pending Admins Section -->
+        <!-- Pending Employees Section -->
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-8">
           <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Pending Admin Approvals</h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Pending Employee Approvals</h3>
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -68,21 +68,21 @@
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="admin in pendingAdmins" :key="admin.id">
+                  <tr v-for="employee in pendingEmployees" :key="employee.id">
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm font-medium text-gray-900">{{ admin.name }}</div>
+                      <div class="text-sm font-medium text-gray-900">{{ employee.name }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-500">{{ admin.email }}</div>
+                      <div class="text-sm text-gray-500">{{ employee.email }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-500">{{ formatDate(admin.created_at) }}</div>
+                      <div class="text-sm text-gray-500">{{ formatDate(employee.created_at) }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button @click="verifyAdmin(admin.id)" class="text-green-600 hover:text-green-900 mr-3">
+                      <button @click="verifyEmployee(employee.id)" class="text-green-600 hover:text-green-900 mr-3">
                         Verify
                       </button>
-                      <button @click="rejectAdmin(admin.id)" class="text-red-600 hover:text-red-900">
+                      <button @click="rejectEmployee(employee.id)" class="text-red-600 hover:text-red-900">
                         Reject
                       </button>
                     </td>
@@ -93,10 +93,10 @@
           </div>
         </div>
 
-        <!-- Verified Admins Section -->
+        <!-- Verified Employees Section -->
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
           <div class="p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Verified Admins</h3>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Verified Employees</h3>
             <div class="overflow-x-auto">
               <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -108,18 +108,18 @@
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="admin in verifiedAdmins" :key="admin.id">
+                  <tr v-for="employee in verifiedEmployees" :key="employee.id">
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm font-medium text-gray-900">{{ admin.name }}</div>
+                      <div class="text-sm font-medium text-gray-900">{{ employee.name }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-500">{{ admin.email }}</div>
+                      <div class="text-sm text-gray-500">{{ employee.email }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      <div class="text-sm text-gray-500">{{ formatDate(admin.updated_at) }}</div>
+                      <div class="text-sm text-gray-500">{{ formatDate(employee.updated_at) }}</div>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button @click="removeAdmin(admin.id)" class="text-red-600 hover:text-red-900">
+                      <button @click="removeEmployee(employee.id)" class="text-red-600 hover:text-red-900">
                         Remove
                       </button>
                     </td>
@@ -140,25 +140,31 @@ import AppLayout from '@/layouts/AppLayout.vue'
 import { router } from '@inertiajs/vue3'
 
 const props = defineProps({
-  pendingAdmins: Array,
-  verifiedAdmins: Array,
+  pendingEmployees: {
+    type: Array,
+    default: () => []
+  },
+  verifiedEmployees: {
+    type: Array,
+    default: () => []
+  }
 })
 
 const formatDate = (date) => {
   return new Date(date).toLocaleDateString()
 }
 
-const verifyAdmin = (id) => {
-  router.post(route('super-admin.verify', id))
+const verifyEmployee = (id) => {
+  router.post(route('super-admin.verify-employee', id))
 }
 
-const rejectAdmin = (id) => {
-  router.post(route('super-admin.reject', id))
+const rejectEmployee = (id) => {
+  router.post(route('super-admin.reject-employee', id))
 }
 
-const removeAdmin = (id) => {
-  if (confirm('Are you sure you want to remove this admin?')) {
-    router.delete(route('super-admin.remove', id))
+const removeEmployee = (id) => {
+  if (confirm('Are you sure you want to remove this employee?')) {
+    router.delete(route('super-admin.remove-employee', id))
   }
 }
 </script>

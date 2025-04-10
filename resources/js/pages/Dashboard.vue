@@ -2,6 +2,31 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
+import { defineProps } from 'vue';
+
+interface Client {
+    id: number;
+    name: string;
+}
+
+interface Record {
+    id: number;
+    number: string;
+    type: string;
+    date: string;
+    amount: number;
+    status: 'paid' | 'pending' | 'overdue';
+    client?: Client;
+}
+
+interface Stats {
+    totalRecords: number;
+    totalAmount: string;
+    pendingRecords: number;
+    pendingAmount: string;
+    overdueRecords: number;
+    overdueAmount: string;
+}
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -10,23 +35,16 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-// Mock data for development - will be replaced with actual API calls
-const stats = {
-    totalRecords: 53,
-    totalAmount: '$15,240.65',
-    pendingRecords: 12,
-    pendingAmount: '$4,320.00',
-    overdueRecords: 3,
-    overdueAmount: '$1,120.50'
-};
+// Define props to receive data from the controller
+const props = defineProps<{
+    stats: Stats;
+    recentRecords: Record[];
+}>();
 
-const recentRecords = [
-    { id: 1, number: 'REC-001', type: 'invoice', client: 'TechSupplies Inc.', date: '2025-04-01', amount: '$540.25', status: 'paid' },
-    { id: 2, number: 'REC-002', type: 'bill', client: 'Office Solutions', date: '2025-04-02', amount: '$890.00', status: 'pending' },
-    { id: 3, number: 'REC-003', type: 'invoice', client: 'Hardware Depot', date: '2025-03-28', amount: '$1,250.75', status: 'overdue' },
-    { id: 4, number: 'REC-004', type: 'bill', client: 'Paper Plus', date: '2025-04-03', amount: '$320.50', status: 'pending' },
-    { id: 5, number: 'REC-005', type: 'invoice', client: 'Tech Services Inc.', date: '2025-04-01', amount: '$750.00', status: 'paid' },
-];
+// No more mock data needed
+// const stats = { ... };
+// const recentRecords = [ ... ];
+
 </script>
 
 <template>
@@ -47,10 +65,10 @@ const recentRecords = [
                         <div class="ml-4">
                             <h3 class="text-sm font-medium text-[#28536B]/70 dark:text-gray-400">Total Records</h3>
                             <div class="mt-1 flex items-baseline">
-                                <p class="text-2xl font-semibold text-[#28536B] dark:text-white">{{ stats.totalRecords }}</p>
+                                <p class="text-2xl font-semibold text-[#28536B] dark:text-white">{{ props.stats.totalRecords }}</p>
                                 <p class="ml-2 text-sm text-[#28536B]/80 dark:text-gray-400">records</p>
                             </div>
-                            <p class="mt-1 text-sm font-medium text-[#28536B] dark:text-white">{{ stats.totalAmount }}</p>
+                            <p class="mt-1 text-sm font-medium text-[#28536B] dark:text-white">{{ props.stats.totalAmount }}</p>
                         </div>
                     </div>
                 </div>
@@ -66,10 +84,10 @@ const recentRecords = [
                         <div class="ml-4">
                             <h3 class="text-sm font-medium text-[#28536B]/70 dark:text-gray-400">Pending Records</h3>
                             <div class="mt-1 flex items-baseline">
-                                <p class="text-2xl font-semibold text-[#28536B] dark:text-white">{{ stats.pendingRecords }}</p>
+                                <p class="text-2xl font-semibold text-[#28536B] dark:text-white">{{ props.stats.pendingRecords }}</p>
                                 <p class="ml-2 text-sm text-[#28536B]/80 dark:text-gray-400">records</p>
                             </div>
-                            <p class="mt-1 text-sm font-medium text-[#28536B] dark:text-white">{{ stats.pendingAmount }}</p>
+                            <p class="mt-1 text-sm font-medium text-[#28536B] dark:text-white">{{ props.stats.pendingAmount }}</p>
                         </div>
                     </div>
                 </div>
@@ -85,10 +103,10 @@ const recentRecords = [
                         <div class="ml-4">
                             <h3 class="text-sm font-medium text-[#28536B]/70 dark:text-gray-400">Overdue Records</h3>
                             <div class="mt-1 flex items-baseline">
-                                <p class="text-2xl font-semibold text-[#28536B] dark:text-white">{{ stats.overdueRecords }}</p>
+                                <p class="text-2xl font-semibold text-[#28536B] dark:text-white">{{ props.stats.overdueRecords }}</p>
                                 <p class="ml-2 text-sm text-[#28536B]/80 dark:text-gray-400">records</p>
                             </div>
-                            <p class="mt-1 text-sm font-medium text-[#28536B] dark:text-white">{{ stats.overdueAmount }}</p>
+                            <p class="mt-1 text-sm font-medium text-[#28536B] dark:text-white">{{ props.stats.overdueAmount }}</p>
                         </div>
                     </div>
                 </div>
@@ -125,7 +143,7 @@ const recentRecords = [
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            <tr v-for="record in recentRecords" :key="record.id" class="hover:bg-[#EDF2F4]/50 dark:hover:bg-[#28536B]/10">
+                            <tr v-for="record in props.recentRecords" :key="record.id" class="hover:bg-[#EDF2F4]/50 dark:hover:bg-[#28536B]/10">
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <div class="text-sm font-medium text-[#28536B] dark:text-white">{{ record.number }}</div>
                                 </td>
@@ -133,13 +151,13 @@ const recentRecords = [
                                     <div class="text-sm font-medium text-[#28536B] dark:text-white capitalize">{{ record.type }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ record.client }}</div>
+                                    <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ record.client?.name ?? 'N/A' }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ record.date }}</div>
+                                    <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ new Date(record.date).toLocaleDateString() }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <div class="text-sm font-medium text-[#28536B] dark:text-white">{{ record.amount }}</div>
+                                    <div class="text-sm font-medium text-[#28536B] dark:text-white">${{ Number(record.amount).toFixed(2) }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <span
