@@ -41,9 +41,7 @@ const props = defineProps<{
     recentRecords: Record[];
 }>();
 
-// No more mock data needed
-// const stats = { ... };
-// const recentRecords = [ ... ];
+
 
 </script>
 
@@ -215,20 +213,20 @@ const props = defineProps<{
                     <div class="mt-4 space-y-3">
                         <div class="flex justify-between">
                             <span class="text-sm text-[#28536B]/70 dark:text-gray-400">Paid Records</span>
-                            <span class="text-sm font-medium text-[#28536B] dark:text-white">38</span>
+                            <span class="text-sm font-medium text-[#28536B] dark:text-white">{{ props.stats.totalRecords - props.stats.pendingRecords - props.stats.overdueRecords }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-sm text-[#28536B]/70 dark:text-gray-400">Pending Records</span>
-                            <span class="text-sm font-medium text-[#28536B] dark:text-white">12</span>
+                            <span class="text-sm font-medium text-[#28536B] dark:text-white">{{ props.stats.pendingRecords }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-sm text-[#28536B]/70 dark:text-gray-400">Overdue Records</span>
-                            <span class="text-sm font-medium text-[#28536B] dark:text-white">3</span>
+                            <span class="text-sm font-medium text-[#28536B] dark:text-white">{{ props.stats.overdueRecords }}</span>
                         </div>
                         <div class="pt-3 border-t border-gray-200 dark:border-gray-700">
                             <div class="flex justify-between">
                                 <span class="text-sm font-medium text-[#28536B] dark:text-white">Total Outstanding</span>
-                                <span class="text-sm font-medium text-[#28536B] dark:text-white">$5,440.50</span>
+                                <span class="text-sm font-medium text-[#28536B] dark:text-white">{{ props.stats.pendingAmount }}</span>
                             </div>
                         </div>
                     </div>
