@@ -46,7 +46,7 @@
                     <SelectValue placeholder="Filter by status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Statuses</SelectItem>
+                    <SelectItem value="all">All Statuses</SelectItem>
                     <SelectItem value="pending">Pending</SelectItem>
                     <SelectItem value="paid">Paid</SelectItem>
                     <SelectItem value="overdue">Overdue</SelectItem>
@@ -77,7 +77,7 @@
                       Client
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Date Range
+                      Invoice Date
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Amount
@@ -99,7 +99,7 @@
                       {{ invoice.client_name }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                      {{ formatDate(invoice.start_date) }} - {{ formatDate(invoice.end_date) }}
+                      {{ formatDate(invoice.end_date) }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap font-medium">
                       {{ invoice.value_after_vat }}
@@ -221,7 +221,7 @@ const props = defineProps<{
 }>();
 
 const search = ref('');
-const statusFilter = ref('');
+const statusFilter = ref('all');
 const sortBy = ref('date_desc');
 const invoiceToDelete = ref<number | null>(null);
 const isDeleting = ref(false);
@@ -240,7 +240,7 @@ const filteredInvoices = computed(() => {
   }
 
   // Apply status filter
-  if (statusFilter.value) {
+  if (statusFilter.value && statusFilter.value !== 'all') {
     result = result.filter((invoice) => invoice.status === statusFilter.value);
   }
 

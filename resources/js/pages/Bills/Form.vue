@@ -61,7 +61,7 @@
         :value="form.end_date"
       >
         <FormItem>
-          <FormLabel>End Date</FormLabel>
+          <FormLabel>Due Date</FormLabel>
           <FormControl>
             <Input type="date" v-model="form.end_date" />
           </FormControl>

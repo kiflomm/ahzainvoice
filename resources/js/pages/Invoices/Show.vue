@@ -55,7 +55,7 @@
               </div>
 
               <div>
-                <h4 class="text-sm font-medium text-gray-500">End Date</h4>
+                <h4 class="text-sm font-medium text-gray-500">Invoice Date</h4>
                 <p class="mt-1 text-sm text-gray-900">{{ invoice.end_date }}</p>
               </div>
 
