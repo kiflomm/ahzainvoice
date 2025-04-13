@@ -134,35 +134,36 @@
   </AppLayout>
 </template>
 
-<script setup>
-import { defineProps } from 'vue'
+<script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue'
 import { router } from '@inertiajs/vue3'
 
-const props = defineProps({
-  pendingEmployees: {
-    type: Array,
-    default: () => []
-  },
-  verifiedEmployees: {
-    type: Array,
-    default: () => []
-  }
-})
+interface Employee {
+  id: number;
+  name: string;
+  email: string;
+  created_at: string;
+  updated_at: string;
+}
 
-const formatDate = (date) => {
+defineProps<{
+  pendingEmployees: Employee[];
+  verifiedEmployees: Employee[];
+}>();
+
+const formatDate = (date: string): string => {
   return new Date(date).toLocaleDateString()
 }
 
-const verifyEmployee = (id) => {
+const verifyEmployee = (id: number): void => {
   router.post(route('super-admin.verify-employee', id))
 }
 
-const rejectEmployee = (id) => {
+const rejectEmployee = (id: number): void => {
   router.post(route('super-admin.reject-employee', id))
 }
 
-const removeEmployee = (id) => {
+const removeEmployee = (id: number): void => {
   if (confirm('Are you sure you want to remove this employee?')) {
     router.delete(route('super-admin.remove-employee', id))
   }
