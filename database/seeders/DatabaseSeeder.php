@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            SuperAdminSeeder::class,
+            AdminSeeder::class,
         ]);
 
         // Create a test user if in local environment

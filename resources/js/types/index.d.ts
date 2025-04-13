@@ -16,6 +16,7 @@ export interface NavItem {
     href: string;
     icon?: LucideIcon;
     isActive?: boolean;
+    requiredRoles?: string[];
     action?: {
         title: string;
         href: string;
@@ -37,6 +38,8 @@ export interface User {
     email: string;
     avatar?: string;
     email_verified_at: string | null;
+    role?: string;
+    is_verified?: boolean;
     created_at: string;
     updated_at: string;
 }

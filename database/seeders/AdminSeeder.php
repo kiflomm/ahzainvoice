@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-class SuperAdminSeeder extends Seeder
+class AdminSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,12 +14,12 @@ class SuperAdminSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'Super Admin',
+            'name' => 'Admin',
             'email' => 'admin@ahazinvoice.com',
             'email_verified_at' => now(),
             'password' => Hash::make('admin123'), // You should change this password in production
-            'role' => 'super_admin',
+            'role' => 'admin',
             'is_verified' => true,
         ]);
     }
-}
+} 

@@ -1,8 +1,19 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/vue3';
+import { type BreadcrumbItem, type SharedData } from '@/types';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import { ArrowDownToLine, ArrowUpFromLine, Users, FileDown } from 'lucide-vue-next';
+import { computed } from 'vue';
+
+const page = usePage<SharedData>();
+const authUser = computed(() => page.props.auth.user);
+const userRole = computed(() => authUser.value.role || 'user');
+
+// Check if user has admin role
+const isAdmin = computed(() => userRole.value === 'admin');
+
+// Check if user has permission to manage records (admin or employee)
+const canManageRecords = computed(() => ['admin', 'employee'].includes(userRole.value));
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -43,27 +54,35 @@ defineProps<Props>();
             <div class="rounded-lg bg-white p-6 shadow-sm dark:bg-[#1a202c]">
                 <h3 class="text-lg font-medium text-[#28536B] dark:text-white">Quick Actions</h3>
                 <div class="mt-4 flex flex-wrap gap-3">
+                    <!-- Invoice and Bill actions (Admin and Employee only) -->
+                    <template v-if="canManageRecords">
+                        <Link 
+                            :href="route('invoices.create')" 
+                            class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-[#28536B] border border-gray-300 hover:bg-[#EDF2F4] dark:bg-[#1a202c] dark:text-gray-200 dark:border-gray-600 dark:hover:bg-[#28536B]/20"
+                        >
+                            <ArrowDownToLine class="-ml-1 mr-2 h-5 w-5 text-emerald-600" />
+                            Add Invoice
+                        </Link>
+                        <Link 
+                            :href="route('bills.create')" 
+                            class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-[#28536B] border border-gray-300 hover:bg-[#EDF2F4] dark:bg-[#1a202c] dark:text-gray-200 dark:border-gray-600 dark:hover:bg-[#28536B]/20"
+                        >
+                            <ArrowUpFromLine class="-ml-1 mr-2 h-5 w-5 text-red-600" />
+                            Add Bill
+                        </Link>
+                    </template>
+                    
+                    <!-- User Management (Admin only) -->
                     <Link 
-                        :href="route('invoices.create')" 
-                        class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-[#28536B] border border-gray-300 hover:bg-[#EDF2F4] dark:bg-[#1a202c] dark:text-gray-200 dark:border-gray-600 dark:hover:bg-[#28536B]/20"
-                    >
-                        <ArrowDownToLine class="-ml-1 mr-2 h-5 w-5 text-emerald-600" />
-                        Add Invoice
-                    </Link>
-                    <Link 
-                        :href="route('bills.create')" 
-                        class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-[#28536B] border border-gray-300 hover:bg-[#EDF2F4] dark:bg-[#1a202c] dark:text-gray-200 dark:border-gray-600 dark:hover:bg-[#28536B]/20"
-                    >
-                        <ArrowUpFromLine class="-ml-1 mr-2 h-5 w-5 text-red-600" />
-                        Add Bill
-                    </Link>
-                    <Link 
+                        v-if="isAdmin"
                         :href="route('users.index')" 
                         class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-[#28536B] border border-gray-300 hover:bg-[#EDF2F4] dark:bg-[#1a202c] dark:text-gray-200 dark:border-gray-600 dark:hover:bg-[#28536B]/20"
                     >
                         <Users class="-ml-1 mr-2 h-5 w-5 text-blue-600" />
                         Manage Users
                     </Link>
+                    
+                    <!-- Export Data (Available to all) -->
                     <button 
                         class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-medium text-[#28536B] border border-gray-300 hover:bg-[#EDF2F4] dark:bg-[#1a202c] dark:text-gray-200 dark:border-gray-600 dark:hover:bg-[#28536B]/20"
                     >
