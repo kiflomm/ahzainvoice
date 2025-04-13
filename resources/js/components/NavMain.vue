@@ -15,15 +15,29 @@ const page = usePage<SharedData>();
         <SidebarGroupLabel>Platform</SidebarGroupLabel>
         <SidebarMenu>
             <SidebarMenuItem v-for="item in items" :key="item.title">
-                <SidebarMenuButton 
-                    as-child :is-active="item.href === page.url"
-                    :tooltip="item.title"
-                >
-                    <Link :href="item.href">
-                        <component :is="item.icon" />
-                        <span>{{ item.title }}</span>
-                    </Link>
-                </SidebarMenuButton>
+                <div class="flex items-center justify-between w-full">
+                    <SidebarMenuButton 
+                        as-child 
+                        :is-active="item.href === page.url"
+                        :tooltip="item.title"
+                        class="flex-grow"
+                    >
+                        <Link :href="item.href">
+                            <component :is="item.icon" />
+                            <span>{{ item.title }}</span>
+                        </Link>
+                    </SidebarMenuButton>
+                    <SidebarMenuButton 
+                        v-if="item.action" 
+                        as-child 
+                        class="ml-2 text-neutral-600 hover:text-neutral-800 dark:text-neutral-300 dark:hover:text-neutral-100"
+                        :tooltip="item.action.title"
+                    >
+                        <Link :href="item.action.href">
+                            <component :is="item.action.icon" class="w-4 h-4" />
+                        </Link>
+                    </SidebarMenuButton>
+                </div>
             </SidebarMenuItem>
         </SidebarMenu>
     </SidebarGroup>
