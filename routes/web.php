@@ -5,6 +5,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\BillController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -25,12 +26,18 @@ Route::resource('invoices', InvoiceController::class);
 
  // Clients
  Route::resource('clients', ClientController::class);
- // Super Admin Routes
- // Record Management Routes
- Route::middleware(['auth', 'verified.employee'])->group(function () {
-     // Generic Records
 
- });
+// User Management Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+});
+
+// Super Admin Routes
+// Record Management Routes
+Route::middleware(['auth', 'verified.employee'])->group(function () {
+    // Generic Records
+
+});
 Route::middleware(['auth'])->prefix('super-admin')->name('super-admin.')->group(function () {
     Route::get('/dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
     Route::post('/verify-employee/{user}', [SuperAdminController::class, 'verifyEmployee'])->name('verify');
