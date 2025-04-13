@@ -11,23 +11,27 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-// Mock data for development - will be replaced with actual API calls
-const stats = {
-    totalRecords: 53,
-    totalAmount: '$15,240.65',
-    pendingRecords: 12,
-    pendingAmount: '$4,320.00',
-    overdueRecords: 3,
-    overdueAmount: '$1,120.50'
-};
+interface Props {
+    stats: {
+        totalRecords: number;
+        totalAmount: string;
+        pendingRecords: number;
+        pendingAmount: string;
+        overdueRecords: number;
+        overdueAmount: string;
+    };
+    recentRecords: {
+        id: number;
+        number: string;
+        type: 'invoice' | 'bill';
+        client: string;
+        date: string;
+        amount: string;
+        status: 'pending' | 'paid' | 'overdue';
+    }[];
+}
 
-const recentRecords = [
-    { id: 1, number: 'REC-001', type: 'invoice', client: 'TechSupplies Inc.', date: '2025-04-01', amount: '$540.25', status: 'paid' },
-    { id: 2, number: 'REC-002', type: 'bill', client: 'Office Solutions', date: '2025-04-02', amount: '$890.00', status: 'pending' },
-    { id: 3, number: 'REC-003', type: 'invoice', client: 'Hardware Depot', date: '2025-03-28', amount: '$1,250.75', status: 'overdue' },
-    { id: 4, number: 'REC-004', type: 'bill', client: 'Paper Plus', date: '2025-04-03', amount: '$320.50', status: 'pending' },
-    { id: 5, number: 'REC-005', type: 'invoice', client: 'Tech Services Inc.', date: '2025-04-01', amount: '$750.00', status: 'paid' },
-];
+defineProps<Props>();
 </script>
 
 <template>
@@ -140,7 +144,7 @@ const recentRecords = [
                         <thead class="bg-[#EDF2F4] dark:bg-[#28536B]/10">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#28536B]/70 dark:text-gray-400">
-                                    Record
+                                    #
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-[#28536B]/70 dark:text-gray-400">
                                     Type
@@ -165,7 +169,11 @@ const recentRecords = [
                                     <div class="text-sm font-medium text-[#28536B] dark:text-white">{{ record.number }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <div class="text-sm font-medium text-[#28536B] dark:text-white capitalize">{{ record.type }}</div>
+                                    <div class="flex items-center">
+                                        <ArrowDownToLine v-if="record.type === 'invoice'" class="h-4 w-4 text-emerald-600 mr-2" />
+                                        <ArrowUpFromLine v-else class="h-4 w-4 text-red-600 mr-2" />
+                                        <span class="text-sm font-medium text-[#28536B] dark:text-white capitalize">{{ record.type }}</span>
+                                    </div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ record.client }}</div>
@@ -174,7 +182,7 @@ const recentRecords = [
                                     <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ record.date }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <div class="text-sm font-medium text-[#28536B] dark:text-white">{{ record.amount }}</div>
+                                    <div class="text-sm font-medium text-[#28536B] dark:text-white">${{ record.amount }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <span
@@ -189,6 +197,11 @@ const recentRecords = [
                                     >
                                         {{ record.status }}
                                     </span>
+                                </td>
+                            </tr>
+                            <tr v-if="recentRecords.length === 0">
+                                <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                    No records found
                                 </td>
                             </tr>
                         </tbody>

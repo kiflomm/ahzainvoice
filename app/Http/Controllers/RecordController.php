@@ -187,4 +187,27 @@ class RecordController extends Controller
         return Redirect::route('records.index')
             ->with('success', 'Record deleted successfully.');
     }
+
+    /**
+     * Get recent records for dashboard
+     */
+    public function getRecentRecords()
+    {
+        return Record::with('client')
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get()
+            ->map(function ($record) {
+                return [
+                    'id' => $record->id,
+                    'number' => $record->record_number,
+                    'type' => $record->record_type,
+                    'client' => $record->client->name,
+                    'date' => $record->end_date->format('Y-m-d'),
+                    'amount' => number_format($record->value_after_vat, 2),
+                    'status' => $record->status,
+                ];
+            });
+    }
 }
