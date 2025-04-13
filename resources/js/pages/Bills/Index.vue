@@ -13,12 +13,6 @@
             <RefreshCcw class="h-4 w-4 mr-2" />
             Refresh
           </Button>
-          <Button asChild>
-            <Link :href="route('bills.create')">
-              <Plus class="h-4 w-4 mr-2" />
-              Create Bill
-            </Link>
-          </Button>
         </div>
       </div>
     </template>
@@ -63,6 +57,12 @@
                     <SelectItem value="amount_asc">Amount (Low to High)</SelectItem>
                   </SelectContent>
                 </Select>
+                <Button asChild>
+                  <Link :href="route('bills.create')">
+                    <ArrowDownToLine class="h-4 w-4 mr-2 text-red-500" />
+                    Create Bill
+                  </Link>
+                </Button>
               </div>
             </div>
 
@@ -203,7 +203,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Eye, PenSquare, Plus, MoreHorizontal, RefreshCcw, Search, Trash, Loader2 } from 'lucide-vue-next';
+import { Eye, PenSquare, MoreHorizontal, RefreshCcw, Search, Trash, Loader2, ArrowDownToLine } from 'lucide-vue-next';
 
 interface Bill {
   id: number;
