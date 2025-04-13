@@ -1,3 +1,46 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { Link, router } from '@inertiajs/vue3';
+import AppLayout from '@/layouts/AppLayout.vue';
+
+interface Record {
+  id: number;
+  record_number: string;
+  client_name: string;
+  record_type: string;
+  start_date: string;
+  value_after_vat: number | string;
+  status: string;
+}
+
+const props = defineProps({
+  records: {
+    type: Array as () => Record[],
+    required: true,
+  }
+});
+
+const search = ref('');
+
+const filteredRecords = computed(() => {
+  if (!search.value) return props.records;
+
+  const searchTerm = search.value.toLowerCase();
+  return props.records.filter(record =>
+    record.record_number.toLowerCase().includes(searchTerm) ||
+    record.client_name.toLowerCase().includes(searchTerm) ||
+    record.status.toLowerCase().includes(searchTerm) ||
+    record.record_type.toLowerCase().includes(searchTerm)
+  );
+});
+
+const deleteRecord = (id: number) => {
+  if (confirm('Are you sure you want to delete this record?')) {
+    router.delete(route('records.destroy', id));
+  }
+};
+</script>
+
 <template>
   <AppLayout>
     <template #header>
@@ -97,7 +140,7 @@
                     </Link>
                     <button
                       @click="deleteRecord(record.id)"
-                      class="text-red-600 hover:text-red-900"
+                      class="text-red-600 hover:text-red-800"
                     >
                       Delete
                     </button>
@@ -111,36 +154,3 @@
     </div>
   </AppLayout>
 </template>
-
-<script setup>
-import { ref, computed } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/AppLayout.vue';
-
-const props = defineProps({
-  records: {
-    type: Array,
-    required: true,
-  }
-});
-
-const search = ref('');
-
-const filteredRecords = computed(() => {
-  if (!search.value) return props.records;
-
-  const searchTerm = search.value.toLowerCase();
-  return props.records.filter(record =>
-    record.record_number.toLowerCase().includes(searchTerm) ||
-    record.client_name.toLowerCase().includes(searchTerm) ||
-    record.status.toLowerCase().includes(searchTerm) ||
-    record.record_type.toLowerCase().includes(searchTerm)
-  );
-});
-
-const deleteRecord = (id) => {
-  if (confirm('Are you sure you want to delete this record?')) {
-    router.delete(route('records.destroy', id));
-  }
-};
-</script>

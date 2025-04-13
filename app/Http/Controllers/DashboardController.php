@@ -17,25 +17,21 @@ class DashboardController extends Controller
      */
     public function index(): Response
     {
-        $user = Auth::user();
-
-        // Fetch recent records (e.g., last 5)
-        // Adjust the query based on your actual models and relationships
-        $recentRecords = Record::where('user_id', $user->id)
+        
+        $recentRecords = Record::with('client')
             ->latest()
             ->take(5)
             ->get();
 
-        // Calculate stats (replace with your actual logic)
-        $totalRecords = Record::where('user_id', $user->id)->count();
-        $pendingRecords = Record::where('user_id', $user->id)->where('status', 'pending')->count();
-        $overdueRecords = Record::where('user_id', $user->id)->where('status', 'overdue')->count(); // Assuming you have an overdue status
+        // Calculate stats - removed user_id filters
+        $totalRecords = Record::count();
+        $pendingRecords = Record::where('status', 'pending')->count();
+        $overdueRecords = Record::where('status', 'overdue')->count();
 
-        // Calculate amounts (replace with actual logic, possibly summing amounts)
-        $totalAmount = Record::where('user_id', $user->id)->sum('value_after_vat'); // Corrected column
-        $pendingAmount = Record::where('user_id', $user->id)->where('status', 'pending')->sum('value_after_vat'); // Corrected column
-        $overdueAmount = Record::where('user_id', $user->id)->where('status', 'overdue')->sum('value_after_vat'); // Corrected column
-
+        // Calculate amounts - removed user_id filters
+        $totalAmount = Record::sum('value_after_vat');
+        $pendingAmount = Record::where('status', 'pending')->sum('value_after_vat');
+        $overdueAmount = Record::where('status', 'overdue')->sum('value_after_vat');
 
         // Format amounts as currency if needed
         $formattedTotalAmount = number_format($totalAmount, 2);

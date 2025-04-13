@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/vue3';
-import { defineProps } from 'vue';
+import { Head, Link } from '@inertiajs/vue3'; 
 
 interface Client {
     id: number;
@@ -11,10 +10,10 @@ interface Client {
 
 interface Record {
     id: number;
-    number: string;
-    type: string;
-    date: string;
-    amount: number;
+    record_number: string;
+    record_type: string;
+    start_date: string;
+    value_after_vat: number | string;
     status: 'paid' | 'pending' | 'overdue';
     client?: Client;
 }
@@ -143,19 +142,19 @@ const props = defineProps<{
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
                             <tr v-for="record in props.recentRecords" :key="record.id" class="hover:bg-[#EDF2F4]/50 dark:hover:bg-[#28536B]/10">
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <div class="text-sm font-medium text-[#28536B] dark:text-white">{{ record.number }}</div>
+                                    <div class="text-sm font-medium text-[#28536B] dark:text-white">{{ record.record_number }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <div class="text-sm font-medium text-[#28536B] dark:text-white capitalize">{{ record.type }}</div>
+                                    <div class="text-sm font-medium text-[#28536B] dark:text-white capitalize">{{ record.record_type }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ record.client?.name ?? 'N/A' }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ new Date(record.date).toLocaleDateString() }}</div>
+                                    <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ record.start_date }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <div class="text-sm font-medium text-[#28536B] dark:text-white">${{ Number(record.amount).toFixed(2) }}</div>
+                                    <div class="text-sm font-medium text-[#28536B] dark:text-white">${{ typeof record.value_after_vat === 'number' ? record.value_after_vat.toFixed(2) : record.value_after_vat }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <span

@@ -17,7 +17,6 @@ class RecordController extends Controller
     public function index()
     {
         $records = Record::with('client')
-            ->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($record) {

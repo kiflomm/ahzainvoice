@@ -139,7 +139,7 @@
   </AppLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 
