@@ -30,7 +30,7 @@ class RecordController extends Controller
                     'end_date' => $record->end_date->format('Y-m-d'),
                     'purchase_type' => $record->purchase_type,
                     'status' => $record->status,
-                    'value_after_vat' => number_format($record->value_after_vat, 2),
+                    'value_after_vat' => $record->value_after_vat,
                 ];
             });
 
@@ -205,7 +205,7 @@ class RecordController extends Controller
                     'type' => $record->record_type,
                     'client' => $record->client->name,
                     'date' => $record->end_date->format('Y-m-d'),
-                    'amount' => number_format($record->value_after_vat, 2),
+                    'amount' => $record->value_after_vat,
                     'status' => $record->status,
                 ];
             });
@@ -231,13 +231,13 @@ class RecordController extends Controller
         
         return [
             'totalRecords' => $totalRecords,
-            'totalAmount' => number_format($totalAmount, 2),
+            'totalAmount' => $totalAmount,
             'pendingRecords' => $pendingRecords,
-            'pendingAmount' => number_format($pendingAmount, 2),
+            'pendingAmount' => $pendingAmount,
             'overdueRecords' => $overdueRecords,
-            'overdueAmount' => number_format($overdueAmount, 2),
+            'overdueAmount' => $overdueAmount,
             'paidRecords' => $paidRecords,
-            'outstandingAmount' => number_format($pendingAmount + $overdueAmount, 2),
+            'outstandingAmount' => $pendingAmount + $overdueAmount,
         ];
     }
 }

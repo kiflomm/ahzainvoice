@@ -102,7 +102,7 @@
                       {{ formatDate(invoice.end_date) }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap font-medium">
-                      {{ invoice.value_after_vat }}
+                      {{ formatCurrency(invoice.value_after_vat) }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                       <Badge
@@ -204,6 +204,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Eye, PenSquare, MoreHorizontal, RefreshCcw, Search, Trash, Loader2, ArrowUpFromLine } from 'lucide-vue-next';
+import { formatCurrency } from '@/composables/useCurrency';
 
 interface Invoice {
   id: number;

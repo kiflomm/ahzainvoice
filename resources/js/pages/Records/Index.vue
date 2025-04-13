@@ -68,7 +68,7 @@
                     {{ record.start_date }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    {{ record.value_after_vat }}
+                    {{ formatCurrency(record.value_after_vat) }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
                     <span
@@ -112,17 +112,25 @@
   </AppLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { formatCurrency } from '@/composables/useCurrency';
 
-const props = defineProps({
-  records: {
-    type: Array,
-    required: true,
-  }
-});
+interface Record {
+  id: number;
+  record_number: string;
+  record_type: string;
+  client_name: string;
+  start_date: string;
+  status: 'pending' | 'paid' | 'overdue';
+  value_after_vat: string | number;
+}
+
+const props = defineProps<{
+  records: Record[];
+}>();
 
 const search = ref('');
 
@@ -138,7 +146,7 @@ const filteredRecords = computed(() => {
   );
 });
 
-const deleteRecord = (id) => {
+const deleteRecord = (id: number) => {
   if (confirm('Are you sure you want to delete this record?')) {
     router.delete(route('records.destroy', id));
   }

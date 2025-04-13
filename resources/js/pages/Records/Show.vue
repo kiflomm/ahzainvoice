@@ -96,7 +96,7 @@
 
               <div>
                 <h4 class="text-sm font-medium text-gray-500">Unit Price</h4>
-                <p class="mt-1 text-sm text-gray-900">{{ record.unit_price }}</p>
+                <p class="mt-1 text-sm text-gray-900">{{ formatCurrency(record.unit_price) }}</p>
               </div>
 
               <div>
@@ -108,15 +108,15 @@
                 <div class="mt-4 border-t pt-4">
                   <div class="flex justify-between">
                     <p class="text-sm font-medium text-gray-500">Subtotal</p>
-                    <p class="text-sm text-gray-900">{{ record.value }}</p>
+                    <p class="text-sm text-gray-900">{{ formatCurrency(record.value) }}</p>
                   </div>
                   <div class="flex justify-between mt-2">
                     <p class="text-sm font-medium text-gray-500">VAT Amount</p>
-                    <p class="text-sm text-gray-900">{{ record.vat }}</p>
+                    <p class="text-sm text-gray-900">{{ formatCurrency(record.value_after_vat - record.value) }}</p>
                   </div>
                   <div class="flex justify-between mt-2">
                     <p class="text-sm font-medium text-gray-500">Total</p>
-                    <p class="text-sm font-medium text-gray-900">{{ record.value_after_vat }}</p>
+                    <p class="text-sm font-medium text-gray-900">{{ formatCurrency(record.value_after_vat) }}</p>
                   </div>
                 </div>
               </div>
@@ -142,6 +142,7 @@
 <script setup>
 import { Link, router } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
+import { formatCurrency } from '@/composables/useCurrency';
 
 const props = defineProps({
   record: {

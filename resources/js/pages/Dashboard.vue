@@ -4,6 +4,7 @@ import { type BreadcrumbItem, type SharedData } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import { ArrowDownToLine, ArrowUpFromLine, Users, FileDown } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { formatCurrency } from '@/composables/useCurrency';
 
 const page = usePage<SharedData>();
 const authUser = computed(() => page.props.auth.user);
@@ -114,7 +115,7 @@ defineProps<Props>();
                                 <p class="text-2xl font-semibold text-[#28536B] dark:text-white">{{ stats.totalRecords }}</p>
                                 <p class="ml-2 text-sm text-[#28536B]/80 dark:text-gray-400">records</p>
                             </div>
-                            <p class="mt-1 text-sm font-medium text-[#28536B] dark:text-white">{{ stats.totalAmount }}</p>
+                            <p class="mt-1 text-sm font-medium text-[#28536B] dark:text-white">{{ formatCurrency(stats.totalAmount) }}</p>
                         </div>
                     </div>
                 </div>
@@ -133,7 +134,7 @@ defineProps<Props>();
                                 <p class="text-2xl font-semibold text-[#28536B] dark:text-white">{{ stats.pendingRecords }}</p>
                                 <p class="ml-2 text-sm text-[#28536B]/80 dark:text-gray-400">records</p>
                             </div>
-                            <p class="mt-1 text-sm font-medium text-[#28536B] dark:text-white">{{ stats.pendingAmount }}</p>
+                            <p class="mt-1 text-sm font-medium text-[#28536B] dark:text-white">{{ formatCurrency(stats.pendingAmount) }}</p>
                         </div>
                     </div>
                 </div>
@@ -152,7 +153,7 @@ defineProps<Props>();
                                 <p class="text-2xl font-semibold text-[#28536B] dark:text-white">{{ stats.overdueRecords }}</p>
                                 <p class="ml-2 text-sm text-[#28536B]/80 dark:text-gray-400">records</p>
                             </div>
-                            <p class="mt-1 text-sm font-medium text-[#28536B] dark:text-white">{{ stats.overdueAmount }}</p>
+                            <p class="mt-1 text-sm font-medium text-[#28536B] dark:text-white">{{ formatCurrency(stats.overdueAmount) }}</p>
                         </div>
                     </div>
                 </div>
@@ -207,7 +208,7 @@ defineProps<Props>();
                                     <div class="text-sm text-[#28536B]/70 dark:text-gray-400">{{ record.date }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <div class="text-sm font-medium text-[#28536B] dark:text-white">${{ record.amount }}</div>
+                                    <div class="text-sm font-medium text-[#28536B] dark:text-white">{{ formatCurrency(record.amount) }}</div>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <span
@@ -258,7 +259,7 @@ defineProps<Props>();
                     <div class="pt-3 border-t border-gray-200 dark:border-gray-700">
                         <div class="flex justify-between">
                             <span class="text-sm font-medium text-[#28536B] dark:text-white">Total Outstanding</span>
-                            <span class="text-sm font-medium text-[#28536B] dark:text-white">{{ summary.outstandingAmount }}</span>
+                            <span class="text-sm font-medium text-[#28536B] dark:text-white">{{ formatCurrency(summary.outstandingAmount) }}</span>
                         </div>
                     </div>
                 </div>

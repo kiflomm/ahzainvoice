@@ -20,18 +20,18 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard', [
         'stats' => [
             'totalRecords' => $stats['totalRecords'],
-            'totalAmount' => '$' . $stats['totalAmount'],
+            'totalAmount' => $stats['totalAmount'],
             'pendingRecords' => $stats['pendingRecords'],
-            'pendingAmount' => '$' . $stats['pendingAmount'],
+            'pendingAmount' => $stats['pendingAmount'],
             'overdueRecords' => $stats['overdueRecords'],
-            'overdueAmount' => '$' . $stats['overdueAmount'],
+            'overdueAmount' => $stats['overdueAmount'],
         ],
         'recentRecords' => $recentRecords,
         'summary' => [
             'paidRecords' => $stats['paidRecords'],
             'pendingRecords' => $stats['pendingRecords'],
             'overdueRecords' => $stats['overdueRecords'],
-            'outstandingAmount' => '$' . $stats['outstandingAmount'],
+            'outstandingAmount' => $stats['outstandingAmount'],
         ],
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');

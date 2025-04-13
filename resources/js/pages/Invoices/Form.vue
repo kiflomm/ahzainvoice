@@ -273,6 +273,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import ClientCreateModal from '@/components/ClientCreateModal.vue';
 import { toast } from '@/components/ui/toast/use-toast';
+import { formatCurrency } from '@/composables/useCurrency';
 
 interface Client {
   id: number;
@@ -355,13 +356,6 @@ const vatAmount = computed(() => {
 const total = computed(() => {
   return subtotal.value + vatAmount.value;
 });
-
-const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(value);
-};
 
 const submit = () => {
   // Ensure numeric fields are properly typed

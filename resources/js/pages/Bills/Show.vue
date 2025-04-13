@@ -146,6 +146,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { Link, router } from '@inertiajs/vue3';
 import { ArrowLeft } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
+import { formatCurrency } from '@/composables/useCurrency';
 
 interface Client {
   id: number;
@@ -174,13 +175,6 @@ interface Bill {
 const props = defineProps<{
   bill: Bill;
 }>();
-
-const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(value);
-};
 
 const deleteBill = () => {
   if (confirm('Are you sure you want to delete this bill?')) {
