@@ -16,20 +16,24 @@ Route::get('/', function () {
 Route::get('dashboard', function () {
     $recordController = new RecordController();
     $recentRecords = $recordController->getRecentRecords();
-    
-    // Mock stats for now - you can implement real stats calculation later
-    $stats = [
-        'totalRecords' => 53,
-        'totalAmount' => '$15,240.65',
-        'pendingRecords' => 12,
-        'pendingAmount' => '$4,320.00',
-        'overdueRecords' => 3,
-        'overdueAmount' => '$1,120.50'
-    ];
+    $stats = $recordController->getDashboardStats();
 
     return Inertia::render('Dashboard', [
-        'stats' => $stats,
+        'stats' => [
+            'totalRecords' => $stats['totalRecords'],
+            'totalAmount' => '$' . $stats['totalAmount'],
+            'pendingRecords' => $stats['pendingRecords'],
+            'pendingAmount' => '$' . $stats['pendingAmount'],
+            'overdueRecords' => $stats['overdueRecords'],
+            'overdueAmount' => '$' . $stats['overdueAmount'],
+        ],
         'recentRecords' => $recentRecords,
+        'summary' => [
+            'paidRecords' => $stats['paidRecords'],
+            'pendingRecords' => $stats['pendingRecords'],
+            'overdueRecords' => $stats['overdueRecords'],
+            'outstandingAmount' => '$' . $stats['outstandingAmount'],
+        ],
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

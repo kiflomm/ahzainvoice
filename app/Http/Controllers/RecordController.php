@@ -210,4 +210,34 @@ class RecordController extends Controller
                 ];
             });
     }
+
+    /**
+     * Get dashboard statistics
+     */
+    public function getDashboardStats()
+    {
+        $records = Record::where('user_id', Auth::id());
+        
+        $totalRecords = $records->count();
+        $totalAmount = $records->sum('value_after_vat');
+        
+        $pendingRecords = $records->where('status', 'pending')->count();
+        $pendingAmount = $records->where('status', 'pending')->sum('value_after_vat');
+        
+        $overdueRecords = $records->where('status', 'overdue')->count();
+        $overdueAmount = $records->where('status', 'overdue')->sum('value_after_vat');
+        
+        $paidRecords = $records->where('status', 'paid')->count();
+        
+        return [
+            'totalRecords' => $totalRecords,
+            'totalAmount' => number_format($totalAmount, 2),
+            'pendingRecords' => $pendingRecords,
+            'pendingAmount' => number_format($pendingAmount, 2),
+            'overdueRecords' => $overdueRecords,
+            'overdueAmount' => number_format($overdueAmount, 2),
+            'paidRecords' => $paidRecords,
+            'outstandingAmount' => number_format($pendingAmount + $overdueAmount, 2),
+        ];
+    }
 }
