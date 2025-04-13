@@ -55,4 +55,42 @@ class Record extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Generate the next invoice number
+     */
+    public static function generateNextInvoiceNumber(): string
+    {
+        $lastInvoice = self::where('record_type', 'invoice')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastInvoice) {
+            return 'AHI0001';
+        }
+
+        $currentNumber = (int) substr($lastInvoice->record_number, 3);
+        $nextNumber = $currentNumber + 1;
+
+        return 'AHI' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Generate the next bill number
+     */
+    public static function generateNextBillNumber(): string
+    {
+        $lastBill = self::where('record_type', 'bill')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$lastBill) {
+            return 'AHB0001';
+        }
+
+        $currentNumber = (int) substr($lastBill->record_number, 3);
+        $nextNumber = $currentNumber + 1;
+
+        return 'AHB' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    }
 }

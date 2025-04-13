@@ -35,7 +35,7 @@
         <FormItem>
           <FormLabel>Invoice Number</FormLabel>
           <FormControl>
-            <Input v-model="form.record_number" placeholder="Enter invoice number" />
+            <Input v-model="form.record_number" placeholder="Enter invoice number" readonly />
           </FormControl>
           <FormMessage>{{ form.errors.record_number }}</FormMessage>
         </FormItem>

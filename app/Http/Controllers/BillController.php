@@ -49,7 +49,7 @@ class BillController extends Controller
         $defaultData = [
             'id' => null,
             'client_id' => $request->client_id ?? 0,
-            'record_number' => '',
+            'record_number' => Record::generateNextBillNumber(),
             'start_date' => '',
             'end_date' => '',
             'purchase_type' => '',
